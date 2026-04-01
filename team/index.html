@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Team — Dining Services | PCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #B8912A; --gold-light: #D4AB4E; --gold-pale: #F5EDD5;
+    --dark: #1A1208; --warm-brown: #4A2E10; --cream: #FAF6EE;
+    --rose: #C47B6A; --text: #2C1F0E; --muted: #6B5240;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+
+  /* NAV */
+  nav { background: var(--dark); border-bottom: 1px solid rgba(184,145,42,0.25); position: sticky; top: 0; z-index: 100; padding: 0 clamp(16px,5vw,80px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 54px; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-brand img { width: 36px; height: 36px; object-fit: contain; }
+  .nav-brand span { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--gold-light); font-style: italic; }
+  .nav-links { display: flex; gap: clamp(12px,2.5vw,28px); list-style: none; }
+  .nav-links a { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(253,248,239,0.6); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+  @media(max-width:600px){ .nav-links { display: none; } }
+
+  /* BREADCRUMB */
+  .breadcrumb { background: var(--dark); padding: 12px clamp(20px,5vw,80px); border-bottom: 1px solid rgba(184,145,42,0.1); }
+  .breadcrumb-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(253,248,239,0.4); }
+  .breadcrumb a { color: rgba(253,248,239,0.4); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold-light); }
+  .breadcrumb span { color: var(--gold-light); }
+
+  /* HERO */
+  .hero { position: relative; min-height: 50vh; background: linear-gradient(160deg, #1A0E06 0%, #2D1A08 50%, #3D2510 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px 60px; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 30% 70%, rgba(180,120,60,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 35% at 70% 20%, rgba(184,145,42,0.1) 0%, transparent 55%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 1px solid rgba(184,145,42,0.3); pointer-events: none; }
+  .corner { position: absolute; width: 28px; height: 28px; border-color: var(--gold); border-style: solid; opacity: 0.7; }
+  .corner.tl { top: 14px; left: 14px; border-width: 2px 0 0 2px; }
+  .corner.tr { top: 14px; right: 14px; border-width: 2px 2px 0 0; }
+  .corner.bl { bottom: 14px; left: 14px; border-width: 0 0 2px 2px; }
+  .corner.br { bottom: 14px; right: 14px; border-width: 0 2px 2px 0; }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold-light); margin-bottom: 16px; position: relative; z-index: 1; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(36px,6vw,64px); color: #FDF8EF; line-height: 1.1; font-weight: 400; position: relative; z-index: 1; margin-bottom: 8px; }
+  .hero-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(13px,2vw,17px); color: var(--gold-light); font-style: italic; position: relative; z-index: 1; margin-bottom: 24px; }
+  .hero-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0 auto; position: relative; z-index: 1; }
+
+  /* LAYOUT */
+  .section { max-width: 1100px; margin: 0 auto; padding: clamp(40px,6vw,80px) clamp(20px,5vw,60px); }
+  .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+  .section-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--gold-light); opacity: 0.5; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(26px,4vw,40px); font-weight: 400; color: var(--warm-brown); line-height: 1.2; margin-bottom: 14px; }
+  .section-body { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 680px; }
+
+  /* ORG CHART */
+  #org { background: #FFF9F1; border-bottom: 1px solid rgba(184,145,42,0.1); }
+  .org-tree { margin-top: 48px; }
+
+  /* TIER */
+  .org-tier { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 0; position: relative; }
+  .org-tier + .org-connector { display: flex; justify-content: center; margin: 12px 0; }
+  .connector-line { width: 1px; height: 28px; background: linear-gradient(180deg, rgba(184,145,42,0.4), rgba(184,145,42,0.1)); }
+  .connector-branch { display: flex; flex-direction: column; align-items: center; }
+  .connector-branch-h { height: 1px; background: rgba(184,145,42,0.3); }
+  .spacer { height: 32px; display: flex; align-items: center; justify-content: center; }
+  .spacer-line { width: 1px; height: 100%; background: rgba(184,145,42,0.3); }
+
+  /* PERSON CARD */
+  .person-card { background: white; border: 1px solid rgba(184,145,42,0.15); border-radius: 16px; padding: 20px 16px; text-align: center; width: 180px; flex-shrink: 0; transition: transform 0.2s, box-shadow 0.2s; }
+  .person-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(90,40,10,0.1); }
+  .person-card.executive { width: 200px; border-color: rgba(184,145,42,0.35); background: linear-gradient(160deg, #FFF9F1, white); }
+  .person-card.director { width: 190px; border-color: rgba(184,145,42,0.25); }
+  .person-avatar { width: 60px; height: 60px; border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 20px; color: #FFF; position: relative; overflow: hidden; }
+  .person-avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .person-avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 20px; color: #FFF; border-radius: 50%; }
+  .avatar-gold { background: linear-gradient(135deg, var(--gold), #D4AB4E); }
+  .avatar-rose { background: linear-gradient(135deg, var(--rose), #D4AB4E); }
+  .avatar-brown { background: linear-gradient(135deg, var(--warm-brown), #8B5E3C); }
+  .avatar-green { background: linear-gradient(135deg, #2D5A3D, #4A8C63); }
+  .person-name { font-family: 'Playfair Display', serif; font-size: 13px; color: var(--warm-brown); margin-bottom: 4px; font-weight: 700; }
+  .person-role { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); line-height: 1.4; }
+  .person-dept { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* BRANCH CONNECTOR */
+  .branch-wrap { display: flex; flex-direction: column; align-items: center; }
+  .branch-down { width: 1px; height: 24px; background: rgba(184,145,42,0.3); }
+  .branch-row { display: flex; align-items: flex-start; justify-content: center; gap: 0; }
+  .branch-col { display: flex; flex-direction: column; align-items: center; }
+  .branch-h-line { height: 1px; background: rgba(184,145,42,0.3); align-self: flex-start; margin-top: 0; }
+  .branch-v-line { width: 1px; height: 20px; background: rgba(184,145,42,0.3); }
+
+  /* TEAMS */
+  #teams { background: var(--cream); }
+  .teams-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-top: 40px; }
+  @media(max-width:700px){ .teams-grid { grid-template-columns: 1fr; } }
+  .team-card { background: white; border: 1px solid rgba(184,145,42,0.12); border-radius: 20px; overflow: hidden; }
+  .team-card-header { padding: 24px 24px 16px; border-bottom: 1px solid rgba(184,145,42,0.08); }
+  .team-card-tag { display: inline-block; font-size: 9px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
+  .tag-alii { background: rgba(184,145,42,0.12); color: var(--gold); }
+  .tag-gateway { background: rgba(45,90,61,0.1); color: #2D5A3D; }
+  .tag-kitchen { background: rgba(74,46,16,0.1); color: var(--warm-brown); }
+  .team-card-name { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--warm-brown); margin-bottom: 4px; }
+  .team-card-manager { font-size: 12px; color: var(--muted); }
+  .team-card-body { padding: 20px 24px; }
+  .team-photo-placeholder { background: linear-gradient(135deg, #2D1A08, #4A2E10); border-radius: 12px; aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border: 1px dashed rgba(184,145,42,0.2); margin-bottom: 16px; }
+  .team-photo-placeholder-icon { font-size: 24px; opacity: 0.35; }
+  .team-photo-placeholder-text { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(253,248,239,0.25); }
+  .team-stats { display: flex; gap: 20px; }
+  .team-stat { }
+  .team-stat-num { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); }
+  .team-stat-label { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+
+  /* FOOTER */
+  footer { background: var(--dark); border-top: 1px solid rgba(184,145,42,0.2); padding: 40px clamp(20px,5vw,60px); text-align: center; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold-light); font-style: italic; margin-bottom: 6px; }
+  .footer-sub { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(253,248,239,0.3); margin-bottom: 20px; }
+  .footer-divider { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0 auto 20px; }
+  .footer-copy { font-size: 11px; color: rgba(253,248,239,0.2); }
+  .footer-back { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); text-decoration: none; margin-bottom: 24px; opacity: 0.7; transition: opacity 0.2s; }
+  .footer-back:hover { opacity: 1; }
+
+  /* FADE */
+  .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  /* ORG RESPONSIVE */
+  @media(max-width:700px){
+    .person-card, .person-card.executive, .person-card.director { width: 140px; padding: 14px 10px; }
+    .person-name { font-size: 11px; }
+    .person-role { font-size: 9px; }
+    .org-tier { gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <img src="../assets/LOGO.svg" alt="PCC Dining Services">
+      <span>Dining Services</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../alii-luau/index.html">Ali'i Luau</a></li>
+      <li><a href="../gateway-buffet/index.html">Gateway Buffet</a></li>
+      <li><a href="../team/index.html" class="active">Team</a></li>
+      <li><a href="../policies/index.html">Policies</a></li>
+      <li><a href="../leads-training/index.html">Leads Training</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="../index.html">Home</a>
+    <span>›</span>
+    <span>Our Team</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <p class="hero-eyebrow">Organizational Chart</p>
+  <h1 class="hero-title">Meet Our Team</h1>
+  <p class="hero-subtitle">One 'Ohana, One Mission</p>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- ORG CHART -->
+<section id="org">
+  <div class="section">
+    <div class="fade-up" style="text-align:center; max-width:640px; margin: 0 auto 48px;">
+      <p class="section-eyebrow" style="justify-content:center;">Leadership</p>
+      <h2 class="section-title">Organizational Chart</h2>
+      <p class="section-body" style="margin:0 auto;">Our department is led by an experienced and dedicated team committed to excellence, growth, and the Spirit of Aloha.</p>
+    </div>
+
+    <div class="org-tree fade-up">
+
+      <!-- TIER 1: President & CEO -->
+      <div class="org-tier">
+        <div class="person-card executive">
+          <div class="person-avatar">
+            <div class="person-avatar-placeholder avatar-gold">AG</div>
+          </div>
+          <div class="person-name">Alfred Grace</div>
+          <div class="person-role">President &amp; CEO</div>
+          <div class="person-dept">Polynesian Cultural Center</div>
+        </div>
+      </div>
+
+      <!-- connector -->
+      <div style="display:flex;justify-content:center;margin:12px 0;">
+        <div style="width:1px;height:28px;background:rgba(184,145,42,0.35);"></div>
+      </div>
+
+      <!-- TIER 2: COO -->
+      <div class="org-tier">
+        <div class="person-card executive">
+          <div class="person-avatar">
+            <div class="person-avatar-placeholder avatar-brown">JH</div>
+          </div>
+          <div class="person-name">Jarod Hester</div>
+          <div class="person-role">Chief Operation Officer</div>
+          <div class="person-dept">Polynesian Cultural Center</div>
+        </div>
+      </div>
+
+      <!-- connector -->
+      <div style="display:flex;justify-content:center;margin:12px 0;">
+        <div style="width:1px;height:28px;background:rgba(184,145,42,0.35);"></div>
+      </div>
+
+      <!-- TIER 3: VP -->
+      <div class="org-tier">
+        <div class="person-card executive">
+          <div class="person-avatar">
+            <div class="person-avatar-placeholder avatar-rose">GM</div>
+          </div>
+          <div class="person-name">Greg Maples</div>
+          <div class="person-role">Vice President</div>
+          <div class="person-dept">Culinary &amp; Retail Division</div>
+        </div>
+      </div>
+
+      <!-- connector -->
+      <div style="display:flex;justify-content:center;margin:12px 0;">
+        <div style="width:1px;height:28px;background:rgba(184,145,42,0.35);"></div>
+      </div>
+
+      <!-- TIER 4: Director -->
+      <div class="org-tier">
+        <div class="person-card director">
+          <div class="person-avatar">
+            <div class="person-avatar-placeholder avatar-gold">MK</div>
+          </div>
+          <div class="person-name">Misty Rose Keanu</div>
+          <div class="person-role">Director of Dining Services</div>
+          <div class="person-dept">Dining Services Dept.</div>
+        </div>
+      </div>
+
+      <!-- horizontal branch to 5 managers -->
+      <div style="display:flex;justify-content:center;margin:12px 0;">
+        <div style="width:1px;height:28px;background:rgba(184,145,42,0.35);"></div>
+      </div>
+
+      <!-- horizontal line spanning managers -->
+      <div style="display:flex;justify-content:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;width:100%;max-width:900px;">
+          <div style="display:flex;width:80%;justify-content:space-between;position:relative;">
+            <div style="position:absolute;top:0;left:10%;right:10%;height:1px;background:rgba(184,145,42,0.3);"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIER 5: Managers -->
+      <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:4px;" class="fade-up">
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div style="width:1px;height:20px;background:rgba(184,145,42,0.3);"></div>
+          <div class="person-card">
+            <div class="person-avatar">
+              <div class="person-avatar-placeholder avatar-rose">VM</div>
+            </div>
+            <div class="person-name">Vonnie Mata'afa</div>
+            <div class="person-role">Hale Aloha Manager</div>
+            <div class="person-dept">Ali'i Luau</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div style="width:1px;height:20px;background:rgba(184,145,42,0.3);"></div>
+          <div class="person-card">
+            <div class="person-avatar">
+              <div class="person-avatar-placeholder avatar-gold">LA</div>
+            </div>
+            <div class="person-name">Liana Apelu</div>
+            <div class="person-role">Hale Ohana Manager</div>
+            <div class="person-dept">Ali'i Luau</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div style="width:1px;height:20px;background:rgba(184,145,42,0.3);"></div>
+          <div class="person-card">
+            <div class="person-avatar">
+              <div class="person-avatar-placeholder avatar-brown">NG</div>
+            </div>
+            <div class="person-name">Nathaniel Gapol</div>
+            <div class="person-role">Gateway Buffet Manager</div>
+            <div class="person-dept">Gateway Buffet</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div style="width:1px;height:20px;background:rgba(184,145,42,0.3);"></div>
+          <div class="person-card">
+            <div class="person-avatar">
+              <div class="person-avatar-placeholder avatar-rose">MA</div>
+            </div>
+            <div class="person-name">Marianna Ah Quin</div>
+            <div class="person-role">Asst. Manager</div>
+            <div class="person-dept">Gateway Buffet</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div style="width:1px;height:20px;background:rgba(184,145,42,0.3);"></div>
+          <div class="person-card">
+            <div class="person-avatar">
+              <div class="person-avatar-placeholder avatar-green">KM</div>
+            </div>
+            <div class="person-name">Kofesina Menapula</div>
+            <div class="person-role">Kitchen Production Manager</div>
+            <div class="person-dept">Kitchen Production</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- LEGEND -->
+    <div class="fade-up" style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap;margin-top:40px;padding-top:32px;border-top:1px solid rgba(184,145,42,0.1);">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#D4AB4E);"></div>
+        <span style="font-size:12px;color:var(--muted);">Executive Leadership</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--rose),#D4AB4E);"></div>
+        <span style="font-size:12px;color:var(--muted);">Ali'i Luau Management</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,var(--warm-brown),#8B5E3C);"></div>
+        <span style="font-size:12px;color:var(--muted);">Gateway Buffet Management</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#2D5A3D,#4A8C63);"></div>
+        <span style="font-size:12px;color:var(--muted);">Kitchen Production</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- TEAMS -->
+<section id="teams">
+  <div class="section">
+    <div class="fade-up" style="text-align:center;max-width:640px;margin:0 auto 48px;">
+      <p class="section-eyebrow" style="justify-content:center;">Our 'Ohana</p>
+      <h2 class="section-title">The Teams</h2>
+      <p class="section-body" style="margin:0 auto;">We are made up of four incredible teams — each with their own identity, energy, and purpose — all united by the Spirit of Aloha.</p>
+    </div>
+
+    <div class="teams-grid">
+
+      <!-- Hale Aloha -->
+      <div class="team-card fade-up">
+        <div class="team-card-header">
+          <span class="team-card-tag tag-alii">Ali'i Luau</span>
+          <div class="team-card-name">Hale Aloha Team</div>
+          <div class="team-card-manager">Manager: Vonnie Mata'afa</div>
+        </div>
+        <div class="team-card-body">
+          <div class="team-photo-placeholder">
+            <div class="team-photo-placeholder-icon">📷</div>
+            <div class="team-photo-placeholder-text">Add team photo to assets/</div>
+          </div>
+          <div class="team-stats">
+            <div class="team-stat">
+              <div class="team-stat-num">350</div>
+              <div class="team-stat-label">Guest Capacity</div>
+            </div>
+            <div class="team-stat">
+              <div class="team-stat-num">Evening</div>
+              <div class="team-stat-label">Service</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hale Ohana -->
+      <div class="team-card fade-up">
+        <div class="team-card-header">
+          <span class="team-card-tag tag-alii">Ali'i Luau</span>
+          <div class="team-card-name">Hale Ohana Team</div>
+          <div class="team-card-manager">Manager: Liana Apelu</div>
+        </div>
+        <div class="team-card-body">
+          <div class="team-photo-placeholder">
+            <div class="team-photo-placeholder-icon">📷</div>
+            <div class="team-photo-placeholder-text">Add team photo to assets/</div>
+          </div>
+          <div class="team-stats">
+            <div class="team-stat">
+              <div class="team-stat-num">200</div>
+              <div class="team-stat-label">Guest Capacity</div>
+            </div>
+            <div class="team-stat">
+              <div class="team-stat-num">Evening</div>
+              <div class="team-stat-label">Service</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gateway Buffet -->
+      <div class="team-card fade-up">
+        <div class="team-card-header">
+          <span class="team-card-tag tag-gateway">Gateway Buffet</span>
+          <div class="team-card-name">Gateway Buffet Team</div>
+          <div class="team-card-manager">Manager: Nathaniel Gapol</div>
+        </div>
+        <div class="team-card-body">
+          <div class="team-photo-placeholder">
+            <div class="team-photo-placeholder-icon">📷</div>
+            <div class="team-photo-placeholder-text">Add team photo to assets/</div>
+          </div>
+          <div class="team-stats">
+            <div class="team-stat">
+              <div class="team-stat-num">626</div>
+              <div class="team-stat-label">Guest Capacity</div>
+            </div>
+            <div class="team-stat">
+              <div class="team-stat-num">AM &amp; PM</div>
+              <div class="team-stat-label">Service</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kitchen Production -->
+      <div class="team-card fade-up">
+        <div class="team-card-header">
+          <span class="team-card-tag tag-kitchen">Kitchen Production</span>
+          <div class="team-card-name">Kitchen Production Team</div>
+          <div class="team-card-manager">Manager: Kofesina Menapula</div>
+        </div>
+        <div class="team-card-body">
+          <div class="team-photo-placeholder">
+            <div class="team-photo-placeholder-icon">📷</div>
+            <div class="team-photo-placeholder-text">Add team photo to assets/</div>
+          </div>
+          <div class="team-stats">
+            <div class="team-stat">
+              <div class="team-stat-num">Back</div>
+              <div class="team-stat-label">of House</div>
+            </div>
+            <div class="team-stat">
+              <div class="team-stat-num">All Day</div>
+              <div class="team-stat-label">Operations</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="../index.html" class="footer-back">← Back to Home</a>
+  <p class="footer-logo">Me'a Ho'okipa</p>
+  <p class="footer-sub">Hospitality from the Heart</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

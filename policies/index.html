@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Policies & Procedures — Dining Services | PCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #B8912A; --gold-light: #D4AB4E; --gold-pale: #F5EDD5;
+    --dark: #1A1208; --warm-brown: #4A2E10; --cream: #FAF6EE;
+    --blue: #1A3A5C; --blue-light: #2E5F8A; --text: #2C1F0E; --muted: #6B5240;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+
+  /* NAV */
+  nav { background: var(--dark); border-bottom: 1px solid rgba(184,145,42,0.25); position: sticky; top: 0; z-index: 100; padding: 0 clamp(16px,5vw,80px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 54px; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-brand img { width: 36px; height: 36px; object-fit: contain; }
+  .nav-brand span { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--gold-light); font-style: italic; }
+  .nav-links { display: flex; gap: clamp(12px,2.5vw,28px); list-style: none; }
+  .nav-links a { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(253,248,239,0.6); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+  @media(max-width:600px){ .nav-links { display: none; } }
+
+  /* BREADCRUMB */
+  .breadcrumb { background: var(--dark); padding: 12px clamp(20px,5vw,80px); border-bottom: 1px solid rgba(184,145,42,0.1); }
+  .breadcrumb-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(253,248,239,0.4); }
+  .breadcrumb a { color: rgba(253,248,239,0.4); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold-light); }
+  .breadcrumb span { color: var(--gold-light); }
+
+  /* HERO */
+  .hero { position: relative; min-height: 50vh; background: linear-gradient(160deg, #0A1520 0%, #1A2E45 50%, #1F3A58 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px 60px; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 30% 70%, rgba(46,95,138,0.2) 0%, transparent 60%), radial-gradient(ellipse 50% 35% at 70% 20%, rgba(184,145,42,0.1) 0%, transparent 55%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 1px solid rgba(46,95,138,0.35); pointer-events: none; }
+  .corner { position: absolute; width: 28px; height: 28px; border-color: #5B9FCC; border-style: solid; opacity: 0.6; }
+  .corner.tl { top: 14px; left: 14px; border-width: 2px 0 0 2px; }
+  .corner.tr { top: 14px; right: 14px; border-width: 2px 2px 0 0; }
+  .corner.bl { bottom: 14px; left: 14px; border-width: 0 0 2px 2px; }
+  .corner.br { bottom: 14px; right: 14px; border-width: 0 2px 2px 0; }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: #7BB5DC; margin-bottom: 16px; position: relative; z-index: 1; }
+  .hero-tag { display: inline-block; background: rgba(46,95,138,0.3); border: 1px solid rgba(91,159,204,0.4); color: #7BB5DC; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; position: relative; z-index: 1; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(32px,5.5vw,58px); color: #FDF8EF; line-height: 1.1; font-weight: 400; position: relative; z-index: 1; margin-bottom: 8px; }
+  .hero-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(13px,2vw,17px); color: #7BB5DC; font-style: italic; position: relative; z-index: 1; margin-bottom: 24px; }
+  .hero-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, #7BB5DC, transparent); margin: 0 auto; position: relative; z-index: 1; }
+
+  /* QUICK NAV */
+  .quick-nav { background: white; border-bottom: 1px solid rgba(184,145,42,0.1); padding: 16px clamp(20px,5vw,80px); position: sticky; top: 54px; z-index: 90; }
+  .quick-nav-inner { max-width: 1100px; margin: 0 auto; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .quick-nav-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-right: 8px; white-space: nowrap; }
+  .quick-link { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; padding: 6px 14px; border-radius: 20px; border: 1px solid rgba(184,145,42,0.2); color: var(--muted); text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .quick-link:hover { background: var(--gold-pale); border-color: var(--gold); color: var(--warm-brown); }
+
+  /* LAYOUT */
+  .section { max-width: 1100px; margin: 0 auto; padding: clamp(40px,6vw,80px) clamp(20px,5vw,60px); }
+  .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+  .section-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--blue-light); opacity: 0.5; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(26px,4vw,38px); font-weight: 400; color: var(--warm-brown); line-height: 1.2; margin-bottom: 14px; }
+  .section-body { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 680px; margin-bottom: 40px; }
+
+  /* POLICY CARDS */
+  .policy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media(max-width:700px){ .policy-grid { grid-template-columns: 1fr; } }
+
+  .policy-card { background: white; border: 1px solid rgba(46,95,138,0.12); border-radius: 20px; overflow: hidden; transition: box-shadow 0.25s; }
+  .policy-card:hover { box-shadow: 0 8px 28px rgba(10,30,50,0.08); }
+  .policy-card-header { display: flex; align-items: center; gap: 14px; padding: 20px 24px; cursor: pointer; user-select: none; border-bottom: 1px solid transparent; transition: border-color 0.2s; }
+  .policy-card-header.open { border-bottom-color: rgba(46,95,138,0.08); }
+  .policy-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .policy-icon-blue { background: #EBF3FA; }
+  .policy-icon-red { background: #FAEBEB; }
+  .policy-icon-amber { background: #FAF3EB; }
+  .policy-icon-green { background: #EBF5EE; }
+  .policy-title { font-family: 'Playfair Display', serif; font-size: 17px; color: var(--warm-brown); flex: 1; }
+  .policy-toggle { width: 26px; height: 26px; border-radius: 50%; background: #EBF3FA; display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--blue-light); transition: transform 0.3s; flex-shrink: 0; }
+  .policy-toggle.open { transform: rotate(180deg); }
+  .policy-body { padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+  .policy-body.open { max-height: 800px; padding: 20px 24px 24px; }
+
+  /* POLICY CONTENT */
+  .policy-desc { font-size: 14px; line-height: 1.75; color: var(--muted); margin-bottom: 16px; }
+  .policy-list { list-style: none; padding: 0; }
+  .policy-list li { font-size: 13px; line-height: 1.65; color: var(--muted); padding: 7px 0; border-bottom: 1px solid rgba(46,95,138,0.06); display: flex; gap: 10px; }
+  .policy-list li:last-child { border-bottom: none; }
+  .policy-list li::before { content: '›'; color: var(--blue-light); flex-shrink: 0; font-weight: 700; }
+  .policy-subsection { margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(46,95,138,0.08); }
+  .policy-subsection-title { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--blue-light); margin-bottom: 10px; }
+
+  /* CHEMICAL BADGES */
+  .chemical-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px; }
+  @media(max-width:500px){ .chemical-grid { grid-template-columns: 1fr; } }
+  .chemical-badge { border-radius: 12px; padding: 14px; text-align: center; }
+  .chemical-badge.red { background: #FAEBEB; border: 1px solid rgba(180,50,50,0.15); }
+  .chemical-badge.blue { background: #EBF3FA; border: 1px solid rgba(46,95,138,0.15); }
+  .chemical-badge.green { background: #EBF5EE; border: 1px solid rgba(45,90,61,0.15); }
+  .chemical-dot { width: 28px; height: 28px; border-radius: 50%; margin: 0 auto 8px; }
+  .dot-red { background: #C0392B; }
+  .dot-blue { background: #2E5F8A; }
+  .dot-green { background: #2D5A3D; }
+  .chemical-name { font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+  .red .chemical-name { color: #C0392B; }
+  .blue .chemical-name { color: #2E5F8A; }
+  .green .chemical-name { color: #2D5A3D; }
+  .chemical-use { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+  /* ALLERGY PILLS */
+  .allergy-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .allergy-pill { background: #FAF3EB; border: 1px solid rgba(184,145,42,0.2); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--warm-brown); font-weight: 700; }
+  .diet-pill { background: #EBF3FA; border: 1px solid rgba(46,95,138,0.2); border-radius: 20px; padding: 5px 14px; font-size: 12px; color: var(--blue-light); font-weight: 700; }
+
+  /* EMERGENCY BOX */
+  .emergency-box { background: linear-gradient(135deg, #FAEBEB, #FDF5F5); border: 1px solid rgba(180,50,50,0.2); border-radius: 16px; padding: 20px 24px; margin-top: 32px; display: flex; gap: 16px; align-items: flex-start; }
+  .emergency-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+  .emergency-title { font-family: 'Playfair Display', serif; font-size: 16px; color: #C0392B; margin-bottom: 6px; }
+  .emergency-text { font-size: 13px; line-height: 1.6; color: var(--muted); }
+
+  /* SECTIONS BG */
+  #safety { background: #F2F7FC; border-bottom: 1px solid rgba(46,95,138,0.08); }
+  #procedures { background: var(--cream); }
+
+  /* FOOTER */
+  footer { background: var(--dark); border-top: 1px solid rgba(184,145,42,0.2); padding: 40px clamp(20px,5vw,60px); text-align: center; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold-light); font-style: italic; margin-bottom: 6px; }
+  .footer-sub { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(253,248,239,0.3); margin-bottom: 20px; }
+  .footer-divider { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0 auto 20px; }
+  .footer-copy { font-size: 11px; color: rgba(253,248,239,0.2); }
+  .footer-back { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); text-decoration: none; margin-bottom: 24px; opacity: 0.7; transition: opacity 0.2s; }
+  .footer-back:hover { opacity: 1; }
+
+  /* FADE */
+  .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <img src="../assets/LOGO.svg" alt="PCC Dining Services">
+      <span>Dining Services</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../alii-luau/index.html">Ali'i Luau</a></li>
+      <li><a href="../gateway-buffet/index.html">Gateway Buffet</a></li>
+      <li><a href="../team/index.html">Team</a></li>
+      <li><a href="../policies/index.html" class="active">Policies</a></li>
+      <li><a href="../leads-training/index.html">Leads Training</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="../index.html">Home</a>
+    <span>›</span>
+    <span>Policies &amp; Procedures</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <p class="hero-eyebrow">Dining Services</p>
+  <span class="hero-tag">Policies &amp; Procedures</span>
+  <h1 class="hero-title">Policies &amp; Procedures</h1>
+  <p class="hero-subtitle">Safety, Sanitation &amp; Operational Standards</p>
+  <div class="hero-divider"></div>
+</section>
+
+<!-- QUICK NAV -->
+<div class="quick-nav">
+  <div class="quick-nav-inner">
+    <span class="quick-nav-label">Jump to:</span>
+    <a class="quick-link" href="#safety">Safety &amp; Sanitation</a>
+    <a class="quick-link" href="#procedures">Emergency Procedures</a>
+    <a class="quick-link" href="#work-etiquette">Work Etiquette</a>
+  </div>
+</div>
+
+<!-- SAFETY & SANITATION -->
+<section id="safety">
+  <div class="section">
+    <div class="fade-up">
+      <p class="section-eyebrow">Safety &amp; Sanitation</p>
+      <h2 class="section-title">Keeping Our Team &amp; Guests Safe</h2>
+      <p class="section-body">Maintaining safety and sanitation in the dining services area is essential to protect the health and well-being of both employees and customers. Clean and sanitary workspaces help prevent food contamination, foodborne illnesses, and workplace accidents. Consistent adherence to these standards reflects our organization's commitment to quality service and responsibility.</p>
+    </div>
+
+    <div class="policy-grid">
+
+      <!-- Hand Washing -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-blue">🧼</div>
+          <div class="policy-title">Washing of Hands</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">Hand washing is one of the most important steps to prevent foodborne illness. Know when and how to wash your hands properly at all times.</p>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">When to Wash Your Hands</div>
+            <ul class="policy-list">
+              <li>After using the restroom.</li>
+              <li>After touching your hair, face, or body.</li>
+              <li>After sneezing, coughing, or using a tissue.</li>
+              <li>After eating or drinking.</li>
+              <li>After handling chemicals that might affect food safety.</li>
+              <li>After taking out garbage.</li>
+              <li>After clearing tables or busing dirty dishes.</li>
+              <li>After touching clothing or aprons.</li>
+              <li>After touching anything that may contaminate hands — dirty equipment, work surfaces, or towels.</li>
+            </ul>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Proper Hand Washing Steps</div>
+            <ul class="policy-list">
+              <li>Wet hands with warm water.</li>
+              <li>Apply soap and lather well.</li>
+              <li>Scrub hands, between fingers, and under nails for 20 seconds.</li>
+              <li>Rinse thoroughly with clean water.</li>
+              <li>Dry with a clean towel or air dryer.</li>
+              <li>Use a towel to turn off the faucet.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gloves -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-blue">🧤</div>
+          <div class="policy-title">Gloves</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">Gloves are a critical barrier between your hands and the food or surfaces you interact with. Always use them correctly.</p>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">How to Use Gloves</div>
+            <ul class="policy-list">
+              <li>Wash your hands before putting on gloves when starting a new task.</li>
+              <li>Hold gloves by the edge when putting them on. Avoid touching the outside of the glove. Check for rips or tears once on.</li>
+              <li>Never roll gloves to make them easier to put on.</li>
+              <li>Never wash and reuse gloves.</li>
+            </ul>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">When to Change Gloves</div>
+            <ul class="policy-list">
+              <li>When switching tasks.</li>
+              <li>When gloves are torn or dirty.</li>
+              <li>After touching your hair, face, or any other part of your body.</li>
+              <li>After continuous hours of working.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chemicals -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-amber">🧪</div>
+          <div class="policy-title">Chemicals</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">Using designated cleaning chemicals ensures all surfaces, equipment, and dining areas are effectively cleaned and sanitized to maintain a safe and hygienic environment.</p>
+          <div class="chemical-grid">
+            <div class="chemical-badge red">
+              <div class="chemical-dot dot-red"></div>
+              <div class="chemical-name">Red</div>
+              <div class="chemical-use">Sanitize utensils, dessert wooden platforms, and anything touched by food.</div>
+            </div>
+            <div class="chemical-badge blue">
+              <div class="chemical-dot dot-blue"></div>
+              <div class="chemical-name">Blue</div>
+              <div class="chemical-use">Pre-soak for utensils in scraping area. Dishwashing liquid for washing plates before the machine.</div>
+            </div>
+            <div class="chemical-badge green">
+              <div class="chemical-dot dot-green"></div>
+              <div class="chemical-name">Green</div>
+              <div class="chemical-use">For degreasing. Wash carts and mop/brush the floor. Mix with water — do not pour directly on floor.</div>
+            </div>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Cleaning Materials</div>
+            <ul class="policy-list">
+              <li>Black bins &amp; red buckets — for collecting waste and chemical solutions.</li>
+              <li>Sanitizing spray — for wiping down surfaces and stations.</li>
+              <li>Paper towel — for drying and cleaning.</li>
+              <li>White cloth &amp; rags — for wiping machines and counters.</li>
+              <li>Mop and mop bucket — for floor cleaning.</li>
+              <li>Brooms &amp; dustpans — for sweeping up debris.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Food Safety -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-green">🍽️</div>
+          <div class="policy-title">Food Safety</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">Proper food safety practices protect guests from contamination and foodborne illness. These rules are non-negotiable and apply to every team member working with food.</p>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Core Rules</div>
+            <ul class="policy-list">
+              <li>FIFO (First In, First Out) procedure must be followed at all times.</li>
+              <li>All team members working closely with food must use disposable gloves and an apron.</li>
+              <li>All food unit doors must be closed at all times.</li>
+              <li>All food containers must be kept on carts or on a table — no food pan, bowl, or container on the ground or floor.</li>
+              <li>All food containers must be covered and labeled.</li>
+            </ul>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Cross Contamination Prevention</div>
+            <ul class="policy-list">
+              <li>Keep all food items in their own respective containers, pans, bowls, and trays.</li>
+              <li>Do not pile food pans on top of each other.</li>
+              <li>Always cover or wrap pans when storing inside food units.</li>
+              <li>Practice proper use of disposable gloves at all times.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Food Allergy -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-amber">⚠️</div>
+          <div class="policy-title">Food Allergy &amp; Special Diet</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">A food allergy is an abnormal response to a food triggered by the body's immune system. Always ask guests about allergies and be prepared to provide accurate information.</p>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Common Food Allergens</div>
+            <div class="allergy-grid">
+              <span class="allergy-pill">Gluten</span>
+              <span class="allergy-pill">Dairy</span>
+              <span class="allergy-pill">Nuts</span>
+              <span class="allergy-pill">Egg</span>
+              <span class="allergy-pill">Soy</span>
+              <span class="allergy-pill">Shellfish</span>
+            </div>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Common Special Diets</div>
+            <div class="allergy-grid">
+              <span class="diet-pill">Vegan</span>
+              <span class="diet-pill">Vegetarian</span>
+              <span class="diet-pill">Pescatarian</span>
+              <span class="diet-pill">Kosher</span>
+              <span class="diet-pill">Halal</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Food Storage -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-blue">🗄️</div>
+          <div class="policy-title">Food &amp; Chemical Storage</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">Proper storage of both food and chemicals keeps our venues safe, organized, and compliant. Each venue has designated storage locations that must be used consistently.</p>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Food Storage by Location</div>
+            <ul class="policy-list">
+              <li>Hale Aloha — dry storage shelves in the back area. Keep organized and labeled.</li>
+              <li>Hale Ohana — refrigerator storage for cold items. Check daily.</li>
+              <li>Gateway Buffet — clearly labeled plastic drawer units for dry goods. Cold items in designated cold units.</li>
+            </ul>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Chemical Storage by Location</div>
+            <ul class="policy-list">
+              <li>Hale Aloha — black bin storage with all chemicals clearly separated.</li>
+              <li>Hale Ohana — blue storage container designated for biohazard kit supplies.</li>
+              <li>Gateway Buffet — dedicated chemical room shelf with items grouped by type.</li>
+              <li>All chemicals must be stored away from food items at all times.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- EMERGENCY PROCEDURES -->
+<section id="procedures">
+  <div class="section">
+    <div class="fade-up">
+      <p class="section-eyebrow">Emergency Procedures</p>
+      <h2 class="section-title">When Something Goes Wrong</h2>
+      <p class="section-body">Knowing how to respond quickly and correctly in emergency situations protects both guests and team members. Review these procedures carefully and ask your lead if you have questions.</p>
+    </div>
+
+    <div class="policy-grid">
+
+      <!-- Biohazard -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-red">☣️</div>
+          <div class="policy-title">Biohazard Procedure</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">A biohazard includes human blood and blood products, microbiological wastes, pathological waste, and sharps waste such as needles, syringes, blades, and broken glass.</p>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Biohazard Kit Contents</div>
+            <ul class="policy-list">
+              <li>Crystal litter, trash bag, brush and dustpan, mask, gloves, apron, wet floor sign.</li>
+            </ul>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Step-by-Step Response</div>
+            <ul class="policy-list">
+              <li>1. Wear mask, disposable apron, and gloves.</li>
+              <li>2. Get the wet floor sign and place it in the biohazard area.</li>
+              <li>3. Pour crystal litter into the biohazard area and wait 3 minutes.</li>
+              <li>4. Cover dustpan and brush with a trash bag.</li>
+              <li>5. Sweep to clean the floor, ensuring no residue remains.</li>
+              <li>6. Spray the floor with pine sol solution and wipe dry with paper towel.</li>
+              <li>7. Tie and dispose of materials properly into the black bag.</li>
+              <li>8. Dispose of your apron and gloves along with the biohazardous materials.</li>
+              <li>9. Label the bag "Biohazard" for proper disposal.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Broken Glass -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-red">🔻</div>
+          <div class="policy-title">Broken Glass Procedure</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">Broken glass is a safety hazard that must be handled immediately and carefully to protect both guests and team members.</p>
+          <ul class="policy-list">
+            <li>Do not touch any fragment of broken glass with bare hands. Use gloves or sweep using a broom and dustpan.</li>
+            <li>Place the broken glass in an empty box. At the end of the night, put the box in a trash bag.</li>
+            <li>Label the trash bag "Broken Glass."</li>
+            <li>Inform the runner that the bag contains broken glass so it can be disposed of properly.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Food & Liquid Spills -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-amber">💧</div>
+          <div class="policy-title">Food &amp; Liquid Spills</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Food Spills</div>
+            <ul class="policy-list">
+              <li>Stand near the spill and get a teammate's attention to help gather materials.</li>
+              <li>Inform guests there is a food spill and ask them to be careful when walking by.</li>
+              <li>Use a broom, dustpan, or paper towels to pick up and remove the food from the floor.</li>
+              <li>Dispose of waste properly and ensure the area is clean before allowing normal traffic to resume.</li>
+            </ul>
+          </div>
+          <div class="policy-subsection">
+            <div class="policy-subsection-title">Liquid Spills</div>
+            <ul class="policy-list">
+              <li>Stand over the spill and get another teammate's attention to help you get materials to dry the spill.</li>
+              <li>Inform guests there is a spill and ask them to be careful as they walk by.</li>
+              <li>Get a wet floor sign, mop, or paper towel.</li>
+              <li>If the floor is completely dry, remove the sign. If not, leave the sign until the floor is dry, then remove it.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Eyewash Station -->
+      <div class="policy-card fade-up">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-blue">👁️</div>
+          <div class="policy-title">Eyewash Station</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <p class="policy-desc">If a chemical or foreign object comes into contact with your eye, use the eyewash station immediately. Do not hesitate — fast action is critical.</p>
+          <ul class="policy-list">
+            <li>Immediately go to the eyewash station.</li>
+            <li>Begin the flow of water.</li>
+            <li>Aim the stream of water on your affected eye.</li>
+            <li>Hold the lids of your eyes open and roll your eyes around.</li>
+            <li>Wash your hands and remove contact lenses if applicable.</li>
+            <li>Do not rub your eyes.</li>
+            <li>If exposed to a chemical, wash for up to 15 minutes.</li>
+            <li>If needed, seek medical attention immediately.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Workplace Violence & Injury -->
+      <div class="policy-card fade-up" style="grid-column: 1 / -1;">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-red">🚨</div>
+          <div class="policy-title">Workplace Violence, Injury &amp; Accidents</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;">
+            <div>
+              <div class="policy-subsection-title">Workplace Violence</div>
+              <ul class="policy-list">
+                <li>Report immediately to your supervisor and/or manager.</li>
+                <li>Security personnel will be contacted if needed.</li>
+                <li>An incident form must be filled out including all witnesses.</li>
+                <li>Directions and instructions will be given by the manager following the incident.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="policy-subsection-title">Work-Related Injuries</div>
+              <ul class="policy-list">
+                <li>Report immediately to your supervisor and manager.</li>
+                <li>First aid personnel will be called to assist and take a detailed report with pictures.</li>
+                <li>Write an incident report immediately or within 24 hours.</li>
+                <li>A doctor's note is required when you return to work.</li>
+                <li>Management will review the doctor's note upon return.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="policy-subsection-title">Guest-Related Injuries</div>
+              <ul class="policy-list">
+                <li>Report immediately to your supervisor and manager.</li>
+                <li>First aid personnel will be called and a detailed report taken with pictures.</li>
+                <li>We are not allowed to give medicine to guests. Direct them to retail stores — Ulu, Ukulele, Mahilalani, or Goo's.</li>
+                <li>Turn in all incident reports to the manager.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="emergency-box fade-up">
+      <div class="emergency-icon">📞</div>
+      <div>
+        <div class="emergency-title">In Any Emergency</div>
+        <div class="emergency-text">Always report immediately to your supervisor or manager. Do not handle serious incidents alone. Your safety and the safety of our guests is always the top priority. When in doubt, call your lead.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WORK ETIQUETTE -->
+<section id="work-etiquette" style="background:#F2F7FC; border-top:1px solid rgba(46,95,138,0.08);">
+  <div class="section">
+    <div class="fade-up">
+      <p class="section-eyebrow">Work Etiquette</p>
+      <h2 class="section-title">Communication &amp; Professionalism</h2>
+      <p class="section-body">Great food brings people in, but great communication keeps them coming back. How we carry ourselves every shift reflects the Spirit of Aloha.</p>
+    </div>
+
+    <div class="policy-grid fade-up">
+
+      <div class="policy-card">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-blue">🗣️</div>
+          <div class="policy-title">Communication</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <ul class="policy-list">
+            <li><strong>Clarity &amp; Conciseness</strong> — Speak clearly so guests or team members understand you the first time. Get to the point without rambling.</li>
+            <li><strong>Tone &amp; Pitch</strong> — It reflects your attitude. Make sure it's friendly, warm, and respectful.</li>
+            <li><strong>Active Listening</strong> — Communication is a two-way street. Don't interrupt — let the other person finish. Listening builds trust and prevents miscommunication.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="policy-card">
+        <div class="policy-card-header" onclick="togglePolicy(this)">
+          <div class="policy-icon policy-icon-green">⭐</div>
+          <div class="policy-title">Professional Standards</div>
+          <div class="policy-toggle">▼</div>
+        </div>
+        <div class="policy-body">
+          <ul class="policy-list">
+            <li>Always arrive on time and in full uniform.</li>
+            <li>Maintain a positive attitude — your energy is contagious.</li>
+            <li>Treat every guest as if they are the most important person in the room.</li>
+            <li>Support your teammates — we succeed together as one 'ohana.</li>
+            <li>Report concerns to your lead promptly rather than letting them escalate.</li>
+            <li>Represent PCC with pride in everything you do.</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="../index.html" class="footer-back">← Back to Home</a>
+  <p class="footer-logo">Me'a Ho'okipa</p>
+  <p class="footer-sub">Hospitality from the Heart</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+
+<script>
+  function togglePolicy(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.policy-toggle');
+    body.classList.toggle('open');
+    toggle.classList.toggle('open');
+    header.classList.toggle('open');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
