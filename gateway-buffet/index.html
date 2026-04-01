@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gateway Buffet — Dining Services | PCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #B8912A; --gold-light: #D4AB4E; --gold-pale: #F5EDD5;
+    --dark: #1A1208; --warm-brown: #4A2E10; --cream: #FAF6EE;
+    --green: #2D5A3D; --green-light: #4A8C63; --text: #2C1F0E; --muted: #6B5240;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Lato', sans-serif; background: var(--cream); color: var(--text); overflow-x: hidden; }
+
+  /* NAV */
+  nav { background: var(--dark); border-bottom: 1px solid rgba(184,145,42,0.25); position: sticky; top: 0; z-index: 100; padding: 0 clamp(16px,5vw,80px); }
+  .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 54px; }
+  .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+  .nav-brand img { width: 36px; height: 36px; object-fit: contain; }
+  .nav-brand span { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--gold-light); font-style: italic; }
+  .nav-links { display: flex; gap: clamp(12px,2.5vw,28px); list-style: none; }
+  .nav-links a { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(253,248,239,0.6); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+  @media(max-width:600px){ .nav-links { display: none; } }
+
+  /* BREADCRUMB */
+  .breadcrumb { background: var(--dark); padding: 12px clamp(20px,5vw,80px); border-bottom: 1px solid rgba(184,145,42,0.1); }
+  .breadcrumb-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 8px; font-size: 11px; color: rgba(253,248,239,0.4); }
+  .breadcrumb a { color: rgba(253,248,239,0.4); text-decoration: none; transition: color 0.2s; }
+  .breadcrumb a:hover { color: var(--gold-light); }
+  .breadcrumb span { color: var(--gold-light); }
+
+  /* HERO */
+  .hero { position: relative; min-height: 60vh; background: linear-gradient(160deg, #0E1A0E 0%, #1A2E14 50%, #1F3A18 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px 60px; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 40% at 30% 70%, rgba(74,140,99,0.18) 0%, transparent 60%), radial-gradient(ellipse 50% 35% at 70% 20%, rgba(184,145,42,0.1) 0%, transparent 55%); pointer-events: none; }
+  .hero::after { content: ''; position: absolute; top: 20px; left: 20px; right: 20px; bottom: 20px; border: 1px solid rgba(74,140,99,0.3); pointer-events: none; }
+  .corner { position: absolute; width: 28px; height: 28px; border-color: var(--green-light); border-style: solid; opacity: 0.7; }
+  .corner.tl { top: 14px; left: 14px; border-width: 2px 0 0 2px; }
+  .corner.tr { top: 14px; right: 14px; border-width: 2px 2px 0 0; }
+  .corner.bl { bottom: 14px; left: 14px; border-width: 0 0 2px 2px; }
+  .corner.br { bottom: 14px; right: 14px; border-width: 0 2px 2px 0; }
+  .hero-eyebrow { font-size: 11px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: #7DBF95; margin-bottom: 16px; position: relative; z-index: 1; }
+  .hero-tag { display: inline-block; background: rgba(45,90,61,0.4); border: 1px solid rgba(74,140,99,0.4); color: #7DBF95; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 20px; position: relative; z-index: 1; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(36px,6vw,64px); color: #FDF8EF; line-height: 1.1; font-weight: 400; position: relative; z-index: 1; margin-bottom: 8px; }
+  .hero-subtitle { font-family: 'Playfair Display', serif; font-size: clamp(13px,2vw,17px); color: #7DBF95; font-style: italic; position: relative; z-index: 1; margin-bottom: 24px; }
+  .hero-divider { width: 60px; height: 1px; background: linear-gradient(90deg, transparent, #7DBF95, transparent); margin: 0 auto 24px; position: relative; z-index: 1; }
+  .hero-quote { font-family: 'Playfair Display', serif; font-size: clamp(14px,2vw,18px); font-style: italic; color: rgba(253,248,239,0.75); max-width: 560px; line-height: 1.6; position: relative; z-index: 1; }
+  .hero-stats { display: flex; gap: 40px; justify-content: center; position: relative; z-index: 1; flex-wrap: wrap; margin-top: 28px; }
+  .stat { text-align: center; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 28px; color: #7DBF95; }
+  .stat-label { font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(253,248,239,0.45); margin-top: 2px; }
+
+  /* SECTIONS */
+  .section { max-width: 1100px; margin: 0 auto; padding: clamp(40px,6vw,80px) clamp(20px,5vw,60px); }
+  .section-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.28em; text-transform: uppercase; color: var(--green-light); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+  .section-eyebrow::before { content: ''; width: 20px; height: 1px; background: var(--green-light); opacity: 0.5; }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(26px,4vw,40px); font-weight: 400; color: var(--warm-brown); line-height: 1.2; margin-bottom: 14px; }
+  .section-body { font-size: 15px; line-height: 1.8; color: var(--muted); max-width: 680px; }
+
+  /* OVERVIEW */
+  #overview { background: #F1F8F3; border-bottom: 1px solid rgba(45,90,61,0.1); }
+  .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  @media(max-width:700px){ .overview-grid { grid-template-columns: 1fr; gap: 28px; } }
+  .info-card { background: white; border: 1px solid rgba(45,90,61,0.15); border-radius: 16px; padding: 28px; }
+  .info-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-light); margin-bottom: 6px; }
+  .info-card-value { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--warm-brown); margin-bottom: 8px; }
+  .info-card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .info-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px; }
+  @media(max-width:480px){ .info-row { grid-template-columns: 1fr; } }
+  .photo-placeholder { background: linear-gradient(135deg, #0E1A0E, #1F3A18); border-radius: 16px; aspect-ratio: 4/3; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; border: 1px dashed rgba(74,140,99,0.3); }
+  .photo-placeholder-icon { font-size: 32px; opacity: 0.4; }
+  .photo-placeholder-text { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(253,248,239,0.25); }
+
+  /* ROLES */
+  #roles { background: var(--cream); }
+  .roles-intro { max-width: 680px; margin-bottom: 48px; }
+  .role-card { background: white; border: 1px solid rgba(45,90,61,0.12); border-radius: 20px; overflow: hidden; margin-bottom: 24px; transition: box-shadow 0.25s; }
+  .role-card:hover { box-shadow: 0 8px 28px rgba(20,60,30,0.08); }
+  .role-header { display: flex; align-items: center; justify-content: space-between; padding: 20px 28px; cursor: pointer; user-select: none; }
+  .role-header-left { display: flex; align-items: center; gap: 16px; }
+  .role-number { width: 36px; height: 36px; border-radius: 50%; background: #EBF5EE; border: 1px solid rgba(45,90,61,0.25); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 14px; color: var(--green); flex-shrink: 0; }
+  .role-name { font-family: 'Playfair Display', serif; font-size: 20px; color: var(--warm-brown); }
+  .role-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; background: #EBF5EE; color: var(--green); margin-left: 10px; }
+  .role-toggle { width: 28px; height: 28px; border-radius: 50%; background: #EBF5EE; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--green); transition: transform 0.3s; flex-shrink: 0; }
+  .role-toggle.open { transform: rotate(180deg); }
+  .role-body { padding: 0 28px; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.3s; }
+  .role-body.open { max-height: 1200px; padding: 0 28px 28px; }
+  .role-desc { font-size: 14px; line-height: 1.75; color: var(--muted); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(45,90,61,0.08); }
+  .role-sections { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  @media(max-width:700px){ .role-sections { grid-template-columns: 1fr; } }
+  .role-section-title { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 10px; }
+  .role-section ul { list-style: none; padding: 0; }
+  .role-section ul li { font-size: 13px; line-height: 1.65; color: var(--muted); padding: 5px 0; border-bottom: 1px solid rgba(45,90,61,0.06); display: flex; gap: 8px; }
+  .role-section ul li::before { content: '›'; color: var(--green-light); flex-shrink: 0; }
+
+  /* MEDIA */
+  #media-section { background: var(--dark); }
+  #media-section .section-title { color: #FDF8EF; }
+  #media-section .section-body { color: rgba(253,248,239,0.6); }
+  #media-section .section-eyebrow { color: #7DBF95; }
+  #media-section .section-eyebrow::before { background: #7DBF95; }
+  .media-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 36px; }
+  @media(max-width:700px){ .media-grid { grid-template-columns: 1fr; } }
+  .media-card { border: 1px dashed rgba(74,140,99,0.25); border-radius: 16px; aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: rgba(255,255,255,0.02); }
+  .media-card-icon { font-size: 28px; opacity: 0.35; }
+  .media-card-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: rgba(253,248,239,0.2); }
+
+  /* FOOTER */
+  footer { background: var(--dark); border-top: 1px solid rgba(184,145,42,0.2); padding: 40px clamp(20px,5vw,60px); text-align: center; }
+  .footer-logo { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--gold-light); font-style: italic; margin-bottom: 6px; }
+  .footer-sub { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(253,248,239,0.3); margin-bottom: 20px; }
+  .footer-divider { width: 50px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 0 auto 20px; }
+  .footer-copy { font-size: 11px; color: rgba(253,248,239,0.2); }
+  .footer-back { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); text-decoration: none; margin-bottom: 24px; opacity: 0.7; transition: opacity 0.2s; }
+  .footer-back:hover { opacity: 1; }
+
+  /* FADE */
+  .fade-up { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-up.visible { opacity: 1; transform: none; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <img src="../assets/LOGO.svg" alt="PCC Dining Services">
+      <span>Dining Services</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/index.html">Home</a></li>
+      <li><a href="/alii-luau/index.html">Ali'i Luau</a></li>
+      <li><a href="/gateway-buffet/index.html" class="active">Gateway Buffet</a></li>
+      <li><a href="/team/index.html">Team</a></li>
+      <li><a href="/policies/index.html">Policies</a></li>
+      <li><a href="/leads-training/index.html">Leads Training</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <div class="breadcrumb-inner">
+    <a href="../index.html">Home</a>
+    <span>›</span>
+    <span>Gateway Buffet</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <p class="hero-eyebrow">Standard Operating Procedure</p>
+  <span class="hero-tag">Gateway Buffet</span>
+  <h1 class="hero-title">Gateway Buffet</h1>
+  <p class="hero-subtitle">Quality Food, Safe Hands &amp; True Aloha in Every Serving</p>
+  <div class="hero-divider"></div>
+  <p class="hero-quote">"Quality food, safe hands, and true aloha in every serving."</p>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num">626</div>
+      <div class="stat-label">Guest Capacity</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Roles</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2</div>
+      <div class="stat-label">Shifts</div>
+    </div>
+  </div>
+</section>
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <div class="section">
+    <div class="overview-grid">
+      <div class="fade-up">
+        <p class="section-eyebrow">About</p>
+        <h2 class="section-title">PCC's Largest Dining Venue</h2>
+        <p class="section-body">The Gateway Buffet is our expansive dining venue offering a wide variety of hot and cold Polynesian and American dishes. Serving up to 626 guests across morning and afternoon service, every team member plays a critical role in keeping the lines flowing and the guests smiling.</p>
+        <div class="info-row">
+          <div class="info-card">
+            <div class="info-card-label">Manager</div>
+            <div class="info-card-value">Nathaniel Gapol</div>
+            <div class="info-card-desc">Gateway Buffet Manager</div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Assistant Manager</div>
+            <div class="info-card-value">Marianna Ah Quin</div>
+            <div class="info-card-desc">Gateway Buffet Assistant Manager</div>
+          </div>
+        </div>
+      </div>
+      <div class="fade-up">
+        <div class="photo-placeholder">
+          <img src="/assets/gateway photos/gateway buffet_banner.jpeg" alt="Gateway Buffet Photo" style="width: 100%; height: auto;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROLES -->
+<section id="roles">
+  <div class="section">
+    <div class="roles-intro fade-up">
+      <p class="section-eyebrow">Roles &amp; Responsibilities</p>
+      <h2 class="section-title">Know Your Role</h2>
+      <p class="section-body">The Gateway Buffet runs on teamwork. Every role has clear Opening, During Operation, and Closing duties. Click any role below to see the full breakdown.</p>
+    </div>
+
+    <!-- GREETER & SCANNER -->
+    <div class="role-card fade-up">
+      <div class="role-header" onclick="toggleRole(this)">
+        <div class="role-header-left">
+          <div class="role-number">1</div>
+          <div class="role-name">Greeter &amp; Scanner</div>
+        </div>
+        <div class="role-toggle">▼</div>
+      </div>
+      <div class="role-body">
+        <p class="role-desc">The Greeters and Scanners are responsible for welcoming guests in a friendly, professional, and efficient manner while ensuring a positive first impression of the venue. This position monitors entry points, assists guests with ticket issues, and communicates with team members to resolve access concerns. Welcoming guests while radiating the Spirit of Aloha is the top priority.</p>
+        <div class="role-sections">
+          <div class="role-section">
+            <div class="role-section-title">Opening</div>
+            <ul>
+              <li>Count tables and check reserved tables before prayer meeting.</li>
+              <li>Assign and rotate roles for greeters, scanners, and seaters.</li>
+              <li>Attend prayer meeting at 4:20 PM.</li>
+              <li>Prepare the reception table, board, and whiteboard markers at the front.</li>
+              <li>Check the stamps and prepare radios for communication.</li>
+              <li>Assign ticket takers to start scanning and lining up guests by the door.</li>
+              <li>Set up and organize stanchions. Ensure extra PCC maps, ponchos, and coupons are available.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">During Operation</div>
+            <ul>
+              <li>Ensure only ticketed guests enter the restaurant.</li>
+              <li>Keep guest traffic at the front flowing smoothly.</li>
+              <li>Ho'okipa communicates with greeters about open seats in all sections.</li>
+              <li>Instruct seaters to always be prompt and at the front of the line.</li>
+              <li>Hold guests in line when Ho'okipa is searching for available seats.</li>
+              <li>Communicate with guests while they wait to make them feel comfortable.</li>
+              <li>Watch for guests leaving for restrooms — ensure they get stamps.</li>
+              <li>By 6:30 PM, move the table to one side and monitor guest flow.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Closing</div>
+            <ul>
+              <li>Close Kahuku doors so guests exit via the Hauula door.</li>
+              <li>Charge the radios and scanners; send a photo to the group chat.</li>
+              <li>Instruct Ho'okipa to make plates from 7:05–7:20 PM.</li>
+              <li>Shake off napkins to ensure no food waste before sending to laundry.</li>
+              <li>Sweep and mop both Kahuku and Hauula door areas.</li>
+              <li>Refill stamp inks and sanitizer dispensers for the whole restaurant.</li>
+              <li>Walk each Ho'okipa area before leaving at 8:00 PM.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTER MORNING -->
+    <div class="role-card fade-up">
+      <div class="role-header" onclick="toggleRole(this)">
+        <div class="role-header-left">
+          <div class="role-number">2</div>
+          <div class="role-name">Setter <span class="role-badge">Morning &amp; Afternoon</span></div>
+        </div>
+        <div class="role-toggle">▼</div>
+      </div>
+      <div class="role-body">
+        <p class="role-desc">The Setter team prepares the entire Gateway Buffet for service. There are two setter shifts: Morning (8:00 AM) and Afternoon (1:00 PM). Both shifts are essential to ensuring the venue is fully ready before guests arrive at 4:30 PM.</p>
+        <div class="role-sections">
+          <div class="role-section">
+            <div class="role-section-title">Morning Setter (8:00 AM)</div>
+            <ul>
+              <li>Clock in at 8:00 AM in full uniform — black rubber shoes, black pants, blue polo shirt, PCC ID.</li>
+              <li>Prayer meeting at 8:05 AM. Everyone rolls silverware for the first hour.</li>
+              <li>Grab the laundry bin from the laundry room and push it to the venue.</li>
+              <li>Sort linens: separate pink linens, flowers, and blue napkins for the afternoon setter.</li>
+              <li>Set up all server carts: red tablecloth, bussing bins, small trash bags, box of gloves, two white towels, and trash bags on all stations.</li>
+              <li>Make sure all covered containers have extras for Hauula, middle, and Kahuku sections.</li>
+              <li>Fill napkin baskets at all lines and salad bar areas (2 lines, 2 Kahuku, 2 Hauula salad bar).</li>
+              <li>Put the tables back and cover the containers for the extras.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Afternoon Setter (1:00 PM)</div>
+            <ul>
+              <li>Clock in at 1:00 PM in full uniform. Put kale and fruit decorations on the salad bar.</li>
+              <li>Turn on lights, warmers, and hot units.</li>
+              <li>Get the breakout from the warehouse and organize items in storage and chemical rooms.</li>
+              <li>Distribute tongs along all the lines. Put ice on salad bar and seafood line.</li>
+              <li>At 3:00 PM: desserts and bread arrive. Count and record each item before arranging.</li>
+              <li>Arrange desserts and bread at the dessert station on both ends of the line.</li>
+              <li>Store extra desserts and bread in the refrigerator and hot units.</li>
+              <li>Count and record fruit, poke, and salad bar dishes as they arrive. Store extras in cold units.</li>
+              <li>At 4:10 PM: put hot food into the lines as soon as they arrive.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Key Notes</div>
+            <ul>
+              <li>Always check with your lead for specific count and layout updates.</li>
+              <li>Maintain cleanliness throughout setup — a clean venue reflects our standards.</li>
+              <li>Notify manager immediately if deliveries are delayed past expected times.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LINEMAN HOT & COLD -->
+    <div class="role-card fade-up">
+      <div class="role-header" onclick="toggleRole(this)">
+        <div class="role-header-left">
+          <div class="role-number">3</div>
+          <div class="role-name">Lineman <span class="role-badge">Hot &amp; Cold</span></div>
+        </div>
+        <div class="role-toggle">▼</div>
+      </div>
+      <div class="role-body">
+        <p class="role-desc">The Line Server (Lineman) is responsible for accurate, safe, and efficient meal assembly while maintaining food quality, proper portion control, timely replenishment of food items, and overall cleanliness of the service line. There are two Lineman roles: Hot Lines and Cold Lines, each with specific duties.</p>
+        <div class="role-sections">
+          <div class="role-section">
+            <div class="role-section-title">Hot Lines — Opening</div>
+            <ul>
+              <li>Arrive by 4:15 PM, attend prayer meeting at 4:20 PM.</li>
+              <li>Finish setting up the line with tongs and black spoons by 4:25 PM.</li>
+              <li>Prepare cart with linen, gloves, red bucket with solution, pot holders, white cloth, sanitary spray, and paper towel.</li>
+              <li>Complete specific opening assignments for your assigned line.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Hot Lines — During Operation</div>
+            <ul>
+              <li>Coordinate with the kitchen order taker for food orders.</li>
+              <li>Refill food lines when pans are half full — remember the FIFO method.</li>
+              <li>Check for food and liquid spills in front and on the floor of stations.</li>
+              <li>When receiving food orders, turn on the warmer. Turn it off after removing food.</li>
+              <li>Keep assigned area clean — wipe and sweep front and back of line throughout operation.</li>
+              <li>Interact with guests 50% of the time: smile, talk, recommend food, answer questions.</li>
+              <li>By 6:30 PM, close and wipe food warmers underneath and behind the lines.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Hot Lines — Closing</div>
+            <ul>
+              <li>Bring food to the back by 7:05 PM.</li>
+              <li>Make plates (7:05–7:20 PM), then proceed to closing assignments.</li>
+              <li>Clean the line area thoroughly using sanitizing spray.</li>
+              <li>Return red bucket and sanitary spray to the rack.</li>
+              <li>Report to your leads once done. Close station lights before clocking out at 8:00 PM.</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(45,90,61,0.08);">
+          <div class="role-section-title" style="margin-bottom:12px;">Cold Lines — Key Duties</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px;">
+            <div>
+              <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Opening</div>
+              <ul style="list-style:none;padding:0;">
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(45,90,61,0.06);display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Attend prayer meeting at 4:20 PM.</li>
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(45,90,61,0.06);display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Prepare cart with linen, gloves, red bucket, sanitary spray.</li>
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Check area for cleanliness. Locate desserts for your station area.</li>
+              </ul>
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">During Operation</div>
+              <ul style="list-style:none;padding:0;">
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(45,90,61,0.06);display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Refill food items, plates, bowls, and spoons as soon as possible.</li>
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(45,90,61,0.06);display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Answer allergy questions and recommend food to guests.</li>
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>At 6:30 PM, drain faucets underneath. Don't wet floor near sockets.</li>
+              </ul>
+            </div>
+            <div>
+              <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Closing</div>
+              <ul style="list-style:none;padding:0;">
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(45,90,61,0.06);display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Take remaining food to the back at 7:05 PM.</li>
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;border-bottom:1px solid rgba(45,90,61,0.06);display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Throw out all fresh salads, dressing, and toss salad daily.</li>
+                <li style="font-size:13px;color:var(--muted);padding:4px 0;display:flex;gap:8px;"><span style="color:var(--green-light)">›</span>Use squeegee to dry floor. Beware of sockets. Close station lights.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRINKING STATION -->
+    <div class="role-card fade-up">
+      <div class="role-header" onclick="toggleRole(this)">
+        <div class="role-header-left">
+          <div class="role-number">4</div>
+          <div class="role-name">Drinking Station</div>
+        </div>
+        <div class="role-toggle">▼</div>
+      </div>
+      <div class="role-body">
+        <p class="role-desc">The Drinking Station team manages all beverage service for the Gateway Buffet — sodas, coffee, iced tea, and soft-serve ice cream. Keeping beverages stocked, machines clean, and the station tidy is essential to a smooth guest experience.</p>
+        <div class="role-sections">
+          <div class="role-section">
+            <div class="role-section-title">Opening</div>
+            <ul>
+              <li>Arrive by 4:15 PM, attend prayer meeting at 4:20 PM.</li>
+              <li>Ensure all condiments, paper cups, blue trays, straws, and creamer are stocked.</li>
+              <li>Place nozzles on the soda machines. Turn on all drink stations and coffee machines.</li>
+              <li>Brew coffee and refill creamers from the fridge.</li>
+              <li>Confirm soft-serve ice cream has been refilled.</li>
+              <li>Place white rags behind each machine for easy spill cleanup.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">During Operation</div>
+            <ul>
+              <li>Restock condiments and cups throughout the night.</li>
+              <li>Maintain enough blue or gray cup trays stacked at each machine.</li>
+              <li>When a rack is empty, take it to the back scraping area and replace it.</li>
+              <li>Refill drink syrups (bibs) as needed.</li>
+              <li>Wipe up any spills by the drink station immediately.</li>
+              <li>Refill pineapple soft-serve ice cream as needed.</li>
+              <li>If there's ice on the floor, sweep and put up the wet floor sign.</li>
+              <li>Brew coffee and refill creamer as needed throughout the night.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Closing</div>
+            <ul>
+              <li>Make plates (7:05–7:20 PM), then proceed to closing.</li>
+              <li>Wipe counters and move condiments, straws, and chopsticks aside.</li>
+              <li>Take iced tea drip trays to the back and wash them.</li>
+              <li>Drain the brewed coffee from the brewer into a red bucket, rinse with water (press small).</li>
+              <li>Wipe the full drinking station. Put creamer in the fridge.</li>
+              <li>Remove nozzles from the drink station and soak in hot water by the red bucket.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCRAPER -->
+    <div class="role-card fade-up">
+      <div class="role-header" onclick="toggleRole(this)">
+        <div class="role-header-left">
+          <div class="role-number">5</div>
+          <div class="role-name">Scraper</div>
+        </div>
+        <div class="role-toggle">▼</div>
+      </div>
+      <div class="role-body">
+        <p class="role-desc">The Scraper is responsible for efficient clearing and collection of used dishes, glassware, utensils, and food waste from guest tables and service areas while maintaining cleanliness and organization in the dining environment. This position supports the linemen and the overall sanitation and operational flow.</p>
+        <div class="role-sections">
+          <div class="role-section">
+            <div class="role-section-title">Opening (5:00 PM)</div>
+            <ul>
+              <li>Clock in at 5:00 PM in full uniform — black rubber boots, black pants, blue polo, PCC ID. Wear apron immediately upon arrival.</li>
+              <li>Move stainless tables forward and arrange them into a U shape.</li>
+              <li>Set up green bins. Arrange containers for bowls and small plates on the right side of the scraping area.</li>
+              <li>Arrange big plate container in the upper part of the scraping area.</li>
+              <li>Fill the sink with water. Lock the sink's drainage and press start. Place the scraping machine's filter.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">During Operation</div>
+            <ul>
+              <li>Remove food waste from large and small plates — ensure no trash or shells go into the green bin.</li>
+              <li>Deliver plates to be washed with running water.</li>
+              <li>Separate spoon, fork, and knife into the black bin with soap and water.</li>
+              <li>Transfer utensils to the other side of the scraping area in their respective containers.</li>
+              <li>Stack plates in the large plate container and bring to the main kitchen for washing.</li>
+              <li>Remove extra food waste from panna cotta and ramekins and clean with a brush.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Closing</div>
+            <ul>
+              <li>Continue scraping until all dishes are cleared.</li>
+              <li>Clean and sanitize the full scraping area.</li>
+              <li>Return all equipment and containers to designated storage.</li>
+              <li>Report to leads before clocking out.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVER -->
+    <div class="role-card fade-up">
+      <div class="role-header" onclick="toggleRole(this)">
+        <div class="role-header-left">
+          <div class="role-number">6</div>
+          <div class="role-name">Server</div>
+        </div>
+        <div class="role-toggle">▼</div>
+      </div>
+      <div class="role-body">
+        <p class="role-desc">Servers are the face of the Gateway Buffet. You greet guests at the door, seat them, explain the buffet layout, and ensure they feel welcome throughout their visit. Your attitude sets the tone for the entire guest experience.</p>
+        <div class="role-sections">
+          <div class="role-section">
+            <div class="role-section-title">Opening</div>
+            <ul>
+              <li>Check the line or other areas for help needed before prayer meeting starts.</li>
+              <li>Attend prayer meeting every day at 4:20 PM.</li>
+              <li>Scout your area and ensure chairs are on all tables.</li>
+              <li>Check your cart: linen cover, sanitizing spray, gloves, trash bags, 2 rags, and bins.</li>
+              <li>Be ready to greet guests at the door by 4:29 PM.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">During Operation</div>
+            <ul>
+              <li>Greet and seat guests with enthusiasm! Wait for guests before walking.</li>
+              <li>Clearly explain: buffet lines, drinking stations, allergy QR code, robot, restroom, and charging station.</li>
+              <li>Provide coupon and coupon details to guests.</li>
+              <li>Do NOT congregate with 3–5 servers at the front. Return to your area immediately.</li>
+              <li>Do NOT overstay at the front — more than 2 minutes without a guest will be called out.</li>
+              <li>When seating 2+ parties, seat each party first and let them know you'll return for instructions.</li>
+            </ul>
+          </div>
+          <div class="role-section">
+            <div class="role-section-title">Closing</div>
+            <ul>
+              <li>Clear and clean all tables in your section.</li>
+              <li>Return all cart items and linens to designated storage.</li>
+              <li>Check the whiteboard for additional closing assignments.</li>
+              <li>Report to your lead before clocking out at 8:00 PM.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MEDIA -->
+<section id="media-section">
+  <div class="section">
+    <div class="fade-up">
+      <p class="section-eyebrow">Photos &amp; Videos</p>
+      <h2 class="section-title">Gallery</h2>
+      <p class="section-body">Add photos and videos of the Gateway Buffet to your <code style="background:rgba(255,255,255,0.08);padding:2px 6px;border-radius:4px;font-size:13px;">assets/</code> folder and they will appear here.</p>
+    </div>
+    <div class="media-grid fade-up">
+      <div class="media-card"><div class="media-card-icon">🖼️</div><div class="media-card-label">Add photo to assets/</div></div>
+      <div class="media-card"><div class="media-card-icon">▶️</div><div class="media-card-label">Add video to assets/</div></div>
+      <div class="media-card"><div class="media-card-icon">🖼️</div><div class="media-card-label">Add photo to assets/</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="../index.html" class="footer-back">← Back to Home</a>
+  <p class="footer-logo">Me'a Ho'okipa</p>
+  <p class="footer-sub">Hospitality from the Heart</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+
+<script>
+  function toggleRole(header) {
+    const body = header.nextElementSibling;
+    const toggle = header.querySelector('.role-toggle');
+    body.classList.toggle('open');
+    toggle.classList.toggle('open');
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
