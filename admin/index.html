@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Editor — Dining Services Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #B8912A; --gold-light: #D4AB4E; --gold-pale: #F5EDD5;
+    --dark: #1A1208; --warm-brown: #4A2E10; --cream: #FAF6EE;
+    --text: #2C1F0E; --muted: #6B5240;
+    --success: #2D5A3D; --success-light: #EBF5EE;
+    --blue: #1A3A5C; --blue-light: #EBF3FA;
+  }
+  body { font-family: 'Lato', sans-serif; background: #F0EBE0; color: var(--text); min-height: 100vh; }
+
+  /* TOP BAR */
+  .topbar { background: var(--dark); padding: 0 32px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 200; border-bottom: 1px solid rgba(184,145,42,0.25); }
+  .topbar-brand { display: flex; align-items: center; gap: 10px; }
+  .topbar-logo { width: 32px; height: 32px; background: var(--gold); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; color: white; font-weight: 700; }
+  .topbar-name { font-family: 'Playfair Display', serif; font-size: 15px; color: var(--gold-light); font-style: italic; }
+  .topbar-badge { background: rgba(184,145,42,0.15); border: 1px solid rgba(184,145,42,0.3); color: var(--gold-light); font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; padding: 3px 10px; border-radius: 20px; font-family: 'Lato', sans-serif; }
+
+  /* LAYOUT */
+  .layout { display: grid; grid-template-columns: 240px 1fr; min-height: calc(100vh - 56px); }
+
+  /* SIDEBAR */
+  .sidebar { background: white; border-right: 1px solid rgba(184,145,42,0.12); padding: 24px 0; position: sticky; top: 56px; height: calc(100vh - 56px); overflow-y: auto; }
+  .sidebar-section { padding: 0 16px; margin-bottom: 8px; }
+  .sidebar-label { font-size: 9px; font-weight: 700; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted); opacity: 0.6; padding: 0 8px; margin-bottom: 6px; display: block; }
+  .sidebar-btn { display: flex; align-items: center; gap: 10px; width: 100%; padding: 9px 12px; border: none; background: none; border-radius: 8px; cursor: pointer; text-align: left; font-size: 13px; color: var(--muted); font-family: 'Lato', sans-serif; transition: all 0.15s; }
+  .sidebar-btn:hover { background: var(--gold-pale); color: var(--warm-brown); }
+  .sidebar-btn.active { background: var(--gold-pale); color: var(--warm-brown); font-weight: 700; }
+  .sidebar-btn .icon { font-size: 14px; width: 20px; text-align: center; }
+  .sidebar-divider { height: 1px; background: rgba(184,145,42,0.1); margin: 12px 16px; }
+
+  /* MAIN */
+  .main { padding: 32px; max-width: 800px; }
+  .page-editor { display: none; }
+  .page-editor.active { display: block; }
+
+  /* PAGE HEADER */
+  .page-header { margin-bottom: 28px; }
+  .page-header h1 { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 400; color: var(--warm-brown); margin-bottom: 6px; }
+  .page-header p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* FIELD GROUPS */
+  .field-group { background: white; border: 1px solid rgba(184,145,42,0.15); border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+  .field-group-title { font-size: 11px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+  .field-group-title::after { content: ''; flex: 1; height: 1px; background: rgba(184,145,42,0.15); }
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { display: block; font-size: 12px; font-weight: 700; color: var(--warm-brown); margin-bottom: 6px; letter-spacing: 0.05em; }
+  .field-hint { font-size: 11px; color: var(--muted); margin-bottom: 6px; opacity: 0.8; }
+  .field input[type="text"], .field textarea, .field select {
+    width: 100%; padding: 10px 14px; border: 1px solid rgba(184,145,42,0.25); border-radius: 8px;
+    font-size: 13px; font-family: 'Lato', sans-serif; color: var(--text); background: #FDFAF5;
+    transition: border-color 0.2s; outline: none; resize: vertical;
+  }
+  .field input[type="text"]:focus, .field textarea:focus { border-color: var(--gold); background: white; }
+  .field textarea { min-height: 80px; line-height: 1.6; }
+  .field textarea.tall { min-height: 120px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media(max-width:600px){ .field-row { grid-template-columns: 1fr; } }
+
+  /* ROLE EDITOR */
+  .role-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+  .role-tab { padding: 6px 14px; border: 1px solid rgba(184,145,42,0.25); border-radius: 20px; font-size: 11px; font-weight: 700; color: var(--muted); cursor: pointer; background: none; font-family: 'Lato', sans-serif; transition: all 0.15s; }
+  .role-tab.active { background: var(--gold-pale); border-color: var(--gold); color: var(--warm-brown); }
+  .role-panel { display: none; }
+  .role-panel.active { display: block; }
+
+  /* GENERATE BUTTON */
+  .generate-bar { background: white; border: 1px solid rgba(184,145,42,0.15); border-radius: 16px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .generate-bar p { font-size: 13px; color: var(--muted); line-height: 1.5; flex: 1; }
+  .generate-bar p strong { color: var(--warm-brown); }
+  .btn-generate { background: var(--gold); color: white; border: none; border-radius: 10px; padding: 12px 24px; font-size: 13px; font-weight: 700; font-family: 'Lato', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 8px; white-space: nowrap; transition: opacity 0.2s; letter-spacing: 0.05em; }
+  .btn-generate:hover { opacity: 0.88; }
+  .btn-secondary { background: var(--gold-pale); color: var(--warm-brown); border: 1px solid rgba(184,145,42,0.3); border-radius: 10px; padding: 10px 18px; font-size: 12px; font-weight: 700; font-family: 'Lato', sans-serif; cursor: pointer; transition: all 0.15s; }
+  .btn-secondary:hover { background: var(--gold); color: white; }
+
+  /* OUTPUT AREA */
+  .output-area { display: none; }
+  .output-area.visible { display: block; }
+  .output-box { background: var(--dark); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  .output-box-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .output-box-title { font-size: 12px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-light); }
+  .output-code { background: rgba(255,255,255,0.04); border: 1px solid rgba(184,145,42,0.15); border-radius: 8px; padding: 14px; font-family: monospace; font-size: 11px; color: rgba(253,248,239,0.7); max-height: 200px; overflow-y: auto; line-height: 1.6; word-break: break-all; white-space: pre-wrap; }
+  .btn-copy { background: rgba(184,145,42,0.15); border: 1px solid rgba(184,145,42,0.3); color: var(--gold-light); border-radius: 8px; padding: 7px 14px; font-size: 11px; font-weight: 700; font-family: 'Lato', sans-serif; cursor: pointer; transition: all 0.2s; letter-spacing: 0.05em; }
+  .btn-copy:hover { background: var(--gold); color: white; }
+  .btn-copy.copied { background: var(--success); border-color: var(--success); color: white; }
+
+  /* SUCCESS TOAST */
+  .toast { position: fixed; bottom: 24px; right: 24px; background: var(--success); color: white; padding: 12px 20px; border-radius: 10px; font-size: 13px; font-weight: 700; font-family: 'Lato', sans-serif; opacity: 0; transform: translateY(12px); transition: all 0.3s; pointer-events: none; z-index: 999; }
+  .toast.show { opacity: 1; transform: none; }
+
+  /* INSTRUCTIONS */
+  .instructions { background: var(--blue-light); border: 1px solid rgba(26,58,92,0.12); border-radius: 14px; padding: 18px 20px; margin-bottom: 20px; }
+  .instructions-title { font-size: 11px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; color: var(--blue); margin-bottom: 10px; }
+  .instructions ol { padding-left: 18px; }
+  .instructions li { font-size: 12px; color: var(--blue); line-height: 1.8; }
+  .instructions li strong { font-weight: 700; }
+
+  /* WELCOME SCREEN */
+  .welcome { text-align: center; padding: 60px 32px; max-width: 560px; margin: 0 auto; }
+  .welcome-icon { font-size: 48px; margin-bottom: 20px; }
+  .welcome h2 { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 400; color: var(--warm-brown); margin-bottom: 12px; }
+  .welcome p { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 24px; }
+  .welcome-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; text-align: left; }
+  .welcome-card { background: white; border: 1px solid rgba(184,145,42,0.15); border-radius: 12px; padding: 16px; }
+  .welcome-card-icon { font-size: 20px; margin-bottom: 8px; }
+  .welcome-card-title { font-size: 13px; font-weight: 700; color: var(--warm-brown); margin-bottom: 4px; }
+  .welcome-card-desc { font-size: 11px; color: var(--muted); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">DS</div>
+    <span class="topbar-name">Dining Services</span>
+  </div>
+  <span class="topbar-badge">Admin Panel</span>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <span class="sidebar-label">Pages</span>
+      <button class="sidebar-btn active" onclick="showPage('welcome')">
+        <span class="icon">🏠</span> Getting Started
+      </button>
+      <button class="sidebar-btn" onclick="showPage('home')">
+        <span class="icon">📄</span> Home Page
+      </button>
+      <button class="sidebar-btn" onclick="showPage('alii')">
+        <span class="icon">🌺</span> Ali'i Luau
+      </button>
+      <button class="sidebar-btn" onclick="showPage('gateway')">
+        <span class="icon">🍽️</span> Gateway Buffet
+      </button>
+      <button class="sidebar-btn" onclick="showPage('team')">
+        <span class="icon">👥</span> Team / Org Chart
+      </button>
+      <button class="sidebar-btn" onclick="showPage('policies')">
+        <span class="icon">📋</span> Policies
+      </button>
+    </div>
+    <div class="sidebar-divider"></div>
+    <div class="sidebar-section">
+      <span class="sidebar-label">Help</span>
+      <button class="sidebar-btn" onclick="showPage('howto')">
+        <span class="icon">❓</span> How to Update GitHub
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- WELCOME -->
+    <div class="page-editor active" id="page-welcome">
+      <div class="welcome">
+        <div class="welcome-icon">🌺</div>
+        <h2>Welcome to the Site Editor</h2>
+        <p>This tool lets you update any content on the Dining Services website without touching a single line of code. Just pick a page on the left, edit the text, and follow the steps to publish.</p>
+        <div class="welcome-cards">
+          <div class="welcome-card">
+            <div class="welcome-card-icon">✏️</div>
+            <div class="welcome-card-title">Edit content</div>
+            <div class="welcome-card-desc">Pick a page from the sidebar and fill in the text boxes.</div>
+          </div>
+          <div class="welcome-card">
+            <div class="welcome-card-icon">⚡</div>
+            <div class="welcome-card-title">Generate HTML</div>
+            <div class="welcome-card-desc">Click the Generate button to create the updated page file.</div>
+          </div>
+          <div class="welcome-card">
+            <div class="welcome-card-icon">📋</div>
+            <div class="welcome-card-title">Copy the code</div>
+            <div class="welcome-card-desc">Click Copy — the whole updated page is on your clipboard.</div>
+          </div>
+          <div class="welcome-card">
+            <div class="welcome-card-icon">🚀</div>
+            <div class="welcome-card-title">Paste to GitHub</div>
+            <div class="welcome-card-desc">Open the file on GitHub, paste, and click Commit. Done!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOW TO UPDATE GITHUB -->
+    <div class="page-editor" id="page-howto">
+      <div class="page-header">
+        <h1>How to Update the Website</h1>
+        <p>Step-by-step guide for publishing changes to GitHub — no coding needed.</p>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Step-by-step instructions</div>
+        <div class="instructions" style="background:#FFF9F1; border-color:rgba(184,145,42,0.2);">
+          <div class="instructions-title" style="color:var(--warm-brown);">Step 1 — Edit your content here</div>
+          <ol>
+            <li>Pick a page from the sidebar on the left (e.g. "Home Page")</li>
+            <li>Update any text in the boxes — just type like you would in Word</li>
+            <li>Click <strong>Generate Updated Page</strong> at the bottom</li>
+            <li>Click <strong>Copy to Clipboard</strong> on the code that appears</li>
+          </ol>
+        </div>
+        <div class="instructions" style="background:var(--blue-light); border-color:rgba(26,58,92,0.12); margin-top:14px;">
+          <div class="instructions-title">Step 2 — Paste to GitHub</div>
+          <ol>
+            <li>Go to <strong>github.com</strong> and sign in to the meahookipa account</li>
+            <li>Click on the repository <strong>meahookipa.github.io</strong></li>
+            <li>Find the file you want to update (e.g. <strong>index.html</strong> for Home, or <strong>alii-luau/index.html</strong> for Ali'i Luau)</li>
+            <li>Click the <strong>pencil icon ✏️</strong> on the top right of the file</li>
+            <li>Press <strong>Ctrl+A</strong> (Windows) or <strong>Cmd+A</strong> (Mac) to select all the existing code</li>
+            <li>Press <strong>Ctrl+V</strong> (Windows) or <strong>Cmd+V</strong> (Mac) to paste your new code</li>
+            <li>Scroll down and click <strong>Commit changes</strong></li>
+            <li>Click <strong>Commit changes</strong> again in the popup</li>
+            <li>Wait about 1 minute — your site is now updated! ✅</li>
+          </ol>
+        </div>
+        <div class="instructions" style="background:var(--success-light); border-color:rgba(45,90,61,0.15); margin-top:14px;">
+          <div class="instructions-title" style="color:var(--success);">Which file = which page?</div>
+          <ol>
+            <li><strong>index.html</strong> → Home page</li>
+            <li><strong>alii-luau/index.html</strong> → Ali'i Luau page</li>
+            <li><strong>gateway-buffet/index.html</strong> → Gateway Buffet page</li>
+            <li><strong>team/index.html</strong> → Team / Org Chart page</li>
+            <li><strong>policies/index.html</strong> → Policies & Procedures page</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOME PAGE EDITOR -->
+    <div class="page-editor" id="page-home">
+      <div class="page-header">
+        <h1>Home Page</h1>
+        <p>Edit the main landing page content. This is the first page new hires see when they visit the site.</p>
+      </div>
+
+      <div class="generate-bar">
+        <p><strong>How it works:</strong> Edit any field below, then click Generate. A ready-to-upload HTML file will appear — just copy and paste it into GitHub.</p>
+        <button class="btn-generate" onclick="generateHome()">⚡ Generate Updated Page</button>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Hero Section</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Department Name</label>
+            <input type="text" id="home-title" value="Dining Services &amp; Kitchen Production">
+          </div>
+          <div class="field">
+            <label>Tagline</label>
+            <input type="text" id="home-tagline" value="Culinary Excellence Rooted in Aloha">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Hawaiian Motto</label>
+            <input type="text" id="home-motto-hawaiian" value="Me'a Ho'okipa">
+          </div>
+          <div class="field">
+            <label>English Motto</label>
+            <input type="text" id="home-motto-english" value="Hospitality from the Heart">
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Welcome Section</div>
+        <div class="field">
+          <label>Welcome Paragraph 1</label>
+          <textarea id="home-welcome1" class="tall">Welcome to the Dining Services and Kitchen Production department. We are excited to have you join our team and begin this valuable hands-on learning experience.</textarea>
+        </div>
+        <div class="field">
+          <label>Pull Quote</label>
+          <input type="text" id="home-quote" value="As you grow in this department, embrace every experience as preparation for your future career and professional success.">
+        </div>
+        <div class="field">
+          <label>Welcome Paragraph 2</label>
+          <textarea id="home-welcome2">Our department ensures quality, safety, and professionalism across every guest interaction — from the first greeting to the final bite. You will develop leadership skills, take initiative in your daily tasks, and perform your responsibilities with confidence and competence.</textarea>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Director Card</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Director Name</label>
+            <input type="text" id="home-director-name" value="Misty Rose Keanu">
+          </div>
+          <div class="field">
+            <label>Director Title</label>
+            <input type="text" id="home-director-role" value="Director of Dining Services">
+          </div>
+        </div>
+        <div class="field">
+          <label>Director Message</label>
+          <textarea id="home-director-msg">"This handbook is your guide to following established standards in dining services and understanding the standard procedures that ensure quality, safety, and professionalism throughout every experience we offer."</textarea>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Mission & Vision</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Our Motto</label>
+            <input type="text" id="home-motto" value="One 'Ohana Sharing Aloha">
+          </div>
+          <div class="field">
+            <label>Our Vision</label>
+            <input type="text" id="home-vision" value="To Spread Aloha Around the World">
+          </div>
+        </div>
+        <div class="field">
+          <label>Our Mission</label>
+          <textarea id="home-mission">To share the cultures, diversity and spirit of Polynesia in a unique and uplifting way that blesses and inspires all who visit, while contributing to the educational development and growth of all employees.</textarea>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">IMUA Values</div>
+        <div class="field-row">
+          <div class="field">
+            <label>I — Integrate Beliefs</label>
+            <textarea id="home-imua-i">We exemplify the Spirit of Aloha by living the values taught by Jesus Christ, as reflected in our cultural beliefs R.E.W.A.T.C.H.</textarea>
+          </div>
+          <div class="field">
+            <label>M — Magnify Employees</label>
+            <textarea id="home-imua-m">Every PCC employee is given opportunities to engage, develop and grow based on their desire, performance and tenure.</textarea>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>U — Uplift Guests</label>
+            <textarea id="home-imua-u">Each guest experiences the very best of Aloha, 'Ohana, Polynesian culture, entertainment, food and fun.</textarea>
+          </div>
+          <div class="field">
+            <label>A — Achieve Excellence</label>
+            <textarea id="home-imua-a">We achieve excellence by making small, measurable improvements day-in, day-out.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Ali'i Luau Venue Card</div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="home-alii-desc">The Ali'i Luau is our signature evening dining event, featuring traditional Polynesian cuisine, cultural performances, and warm island hospitality. Every detail — from the food to the atmosphere — is crafted to transport guests into the heart of the Pacific.</textarea>
+        </div>
+        <div class="field">
+          <label>Roles (comma separated)</label>
+          <input type="text" id="home-alii-roles" value="Lineman, Smoothie Station, Dessert &amp; Gelato, Greeter &amp; Scanner, Scraper, Setter, Server">
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Gateway Buffet Venue Card</div>
+        <div class="field">
+          <label>Description</label>
+          <textarea id="home-gateway-desc">The Gateway Buffet offers guests a wide variety of hot and cold Polynesian and American dishes throughout morning and afternoon service. A welcoming, high-energy venue with a focus on excellent food presentation and guest satisfaction.</textarea>
+        </div>
+        <div class="field">
+          <label>Roles (comma separated)</label>
+          <input type="text" id="home-gateway-roles" value="Greeter &amp; Scanner, Setter (AM &amp; PM), Lineman Hot &amp; Cold, Drinking Station, Scraper, Server">
+        </div>
+      </div>
+
+      <div class="output-area" id="home-output">
+        <div class="output-box">
+          <div class="output-box-header">
+            <span class="output-box-title">📄 Updated index.html — Copy this and paste into GitHub</span>
+            <button class="btn-copy" id="home-copy-btn" onclick="copyOutput('home-code', 'home-copy-btn')">Copy to Clipboard</button>
+          </div>
+          <div class="output-code" id="home-code"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALI'I LUAU EDITOR -->
+    <div class="page-editor" id="page-alii">
+      <div class="page-header">
+        <h1>Ali'i Luau Page</h1>
+        <p>Edit the Ali'i Luau roles, descriptions, and SOPs. Click a role tab below to edit each role's content.</p>
+      </div>
+
+      <div class="generate-bar">
+        <p><strong>Edit any role below</strong>, then click Generate to get the updated page file.</p>
+        <button class="btn-generate" onclick="generateAlii()">⚡ Generate Updated Page</button>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Page Overview</div>
+        <div class="field-row">
+          <div class="field">
+            <label>Hale Aloha Manager</label>
+            <input type="text" id="alii-mgr-aloha" value="Vonnie Mata'afa">
+          </div>
+          <div class="field">
+            <label>Hale Ohana Manager</label>
+            <input type="text" id="alii-mgr-ohana" value="Liana Apelu">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Hale Aloha Capacity</label>
+            <input type="text" id="alii-cap-aloha" value="350">
+          </div>
+          <div class="field">
+            <label>Hale Ohana Capacity</label>
+            <input type="text" id="alii-cap-ohana" value="200">
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <div class="field-group-title">Role Editor</div>
+        <div class="role-tabs">
+          <button class="role-tab active" onclick="showRole('alii','lineman',this)">Lineman</button>
+          <button class="role-tab" onclick="showRole('alii','smoothie',this)">Smoothie</button>
+          <button class="role-tab" onclick="showRole('alii','dessert',this)">Dessert & Gelato</button>
+          <button class="role-tab" onclick="showRole('alii','greeter',this)">Greeter & Scanner</button>
+          <button class="role-tab" onclick="showRole('alii','scraper',this)">Scraper</button>
+          <button class="role-tab" onclick="showRole('alii','setter',this)">Setter</button>
+          <button class="role-tab" onclick="showRole('alii','server',this)">Server</button>
+        </div>
+
+        <div class="role-panel active" id="alii-role-lineman">
+          <div class="field"><label>Role Description</label><textarea class="tall" id="alii-lineman-desc">The Line Server (Lineman) is responsible for accurate, safe, and efficient meal assembly while maintaining food quality, proper portion control, timely replenishment of food items, verification of allergen restrictions, and overall cleanliness of the service line.</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Opening Duties</label><textarea class="tall" id="alii-lineman-open">Two line workers clock in at 3:45 PM. Set up buffet lines with ice, cold condiments, and tongs.
+At 4:00 PM, set up remaining cold condiments and fruit stations with ice bags, kale, and extra tongs.
+At 4:45–5:00 PM, take food out to buffet lines and cover with clean plastic wrap to prevent contamination.</textarea></div>
+            <div class="field"><label>During Operation</label><textarea class="tall" id="alii-lineman-during">5:10–5:50 PM: Guests arrive. Refill all buffet and fruit stations. Wipe stations with wet cloth.
+5:50–6:10: Close one side of the buffet lines and refill the other. Remove foods and condiments to the back.
+6:10–6:20 PM: Two linemen clean tongs while others prepare the open line for closure.</textarea></div>
+          </div>
+          <div class="field"><label>Closing Duties</label><textarea id="alii-lineman-close">Remove remaining food from the line and return to the kitchen.
+Clean and sanitize the entire service line area.
+Return all equipment and condiments to designated storage areas.
+Check whiteboard for additional closing assignments.</textarea></div>
+        </div>
+
+        <div class="role-panel" id="alii-role-smoothie">
+          <div class="field"><label>Role Description</label><textarea class="tall" id="alii-smoothie-desc">The Smoothie Station team delivers our signature complimentary piña colada smoothies to every guest table. You are one of the first direct contacts guests have with our team — your smile and warmth set the tone for the entire evening.</textarea></div>
+          <div class="field"><label>Service Script</label><textarea id="alii-smoothie-script">"Aloha ohana. Welcome to Ali'i Luau. This is our complementary drink: Piña colada smoothie. It's non-alcoholic and contains pineapple, coconut, and dairy milk. Is there anyone who is allergic?"
+If yes, offer mango smoothie: "Our mango smoothie is dairy-free, pineapple-free and coconut-free. Would you want to have that instead?"</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>During Operation</label><textarea class="tall" id="alii-smoothie-during">Station at your area at exactly 4:30 PM.
+Grip and carry each tray with care so nothing spills.
+SMILE while serving — even before you arrive at the table.
+ROAM your area continuously to ensure all guests are served.
+At 5:10 PM, push carts to the back when guests are dismissed.</textarea></div>
+            <div class="field"><label>Closing Duties</label><textarea class="tall" id="alii-smoothie-close">Prepare refills only as requested — smoothies left out too long become watery.
+Wash trays by hand (Ohana) or run through dishwasher.
+Put the blender and mango glasses in designated storage.
+Wash empty pineapple racks and push back to the main kitchen.
+Put empty coolers outside for runners to collect.</textarea></div>
+          </div>
+        </div>
+
+        <div class="role-panel" id="alii-role-dessert">
+          <div class="field"><label>Role Description</label><textarea id="alii-dessert-desc">The Dessert and Gelato team manages two of the most memorable stations at the Ali'i Luau. Presentation is everything — make your station look BEAUTIFUL at all times and ensure every guest feels welcomed and valued.</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Gelato Opening</label><textarea class="tall" id="alii-dessert-open">Turn on machine (lights) around 5 PM after dismissing.
+Take gelato out of freezer and leave for at least 5 minutes.
+Garnish gelato BEAUTIFULLY — use corresponding fruits. Do NOT use little umbrellas.
+Fill black bowls with hot/warm water. Ensure enough cups and spoons.
+Put up your labels nicely.</textarea></div>
+            <div class="field"><label>Gelato During Operation</label><textarea class="tall" id="alii-dessert-during">Greet guests warmly at all times.
+Use mini plastic cups with only 1 scoop unless guest requests more.
+Use a DIFFERENT scoop for each flavour — IMPORTANT!
+Change gloves when they become sticky or dirty.
+Don't rush guests — let them take their time.</textarea></div>
+          </div>
+          <div class="field"><label>Gelato Closing</label><textarea id="alii-dessert-close">Take out gelato trays and record leftovers.
+Wrap leftovers twice with plastic wrap and return to freezer.
+Clean empty trays, scoops, and bowls.
+Clean inside and outside of machine with paper towel and sanitizer spray.
+Defrost machine every other two weeks (Aloha: twice a week).
+Turn off lights. Order breakout for next day.</textarea></div>
+        </div>
+
+        <div class="role-panel" id="alii-role-greeter">
+          <div class="field"><label>Role Description</label><textarea id="alii-greeter-desc">The Greeters and Scanners are responsible for welcoming guests in a friendly, professional, and efficient manner while ensuring a positive first impression of the venue. Welcoming guests while radiating the Spirit of Aloha is your top priority.</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Opening Duties</label><textarea class="tall" id="alii-greeter-open">Set up the front entrance — podium, stanchions, radios, and guest management tools.
+Ensure adequate lei supply for all expected guests.
+Brief with your team on the evening's guest count.</textarea></div>
+            <div class="field"><label>During Operation</label><textarea class="tall" id="alii-greeter-during">Scan guest tickets and ensure the correct number of guests enters.
+Dancers will be at the front, ready to give leis to guests.
+Magic Memories photographers will take guest pictures at entry.
+Direct guests to seaters to be seated.
+Monitor guest count and ensure enough leis remain.</textarea></div>
+          </div>
+          <div class="field"><label>Closing Duties</label><textarea id="alii-greeter-close">At 5:45 PM begin closing the front area.
+One greeter remains for late-arriving guests.
+After the show, return to the front to bid guests farewell.
+Collect condiments, salt/pepper shakers, and items from drinking stations.
+Check out with your lead and supervisor before leaving.</textarea></div>
+        </div>
+
+        <div class="role-panel" id="alii-role-scraper">
+          <div class="field"><label>Role Description</label><textarea id="alii-scraper-desc">The Scraper is responsible for efficient clearing and collection of used dishes, glassware, utensils, and food waste from guest tables and service areas while maintaining cleanliness and organization in the dining environment.</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Opening Duties</label><textarea class="tall" id="alii-scraper-open">Fill each buffet line — two buckets per line, one and a half bins per poke station.
+Help prepare the piña coladas: be the runner and refill pineapple carts continuously, and make mango smoothie when needed.</textarea></div>
+            <div class="field"><label>During Operation</label><textarea class="tall" id="alii-scraper-during">Prepare bins and trash bags for food waste.
+Arrange two racks in the sink where servers organize silverware.
+Fill sink with water and eco lab dishwashing soap.
+Start scraping plates immediately — do not let plates pile up.
+Clean dirty plates with warm water and place them in the dollies.</textarea></div>
+          </div>
+          <div class="field"><label>Closing Duties</label><textarea id="alii-scraper-close">Push silverware to the machine to clean it.
+Arrange plate dollies for runners to pick up.
+Clean the dishwashing sink and floor.
+Help clean the kitchen.</textarea></div>
+        </div>
+
+        <div class="role-panel" id="alii-role-setter">
+          <div class="field"><label>Role Description</label><textarea id="alii-setter-desc">The Setter team prepares the venue for service — from setting tables and arranging silverware to setting up the drinking stations, fruit stations, and dessert areas.</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Morning Shift (9:00 AM – 12:30 PM)</label><textarea class="tall" id="alii-setter-morning">Pick up the laundry bin from laundry.
+Pick up the breakout and leis (Leads pick the Breakout).
+Put cups, condiments, and menu brochure on tables.
+Roll silverware in a napkin; fold the napkin for the Supers.
+Set plates, cups, and silverware on the table.
+Set up tables according to the counts.</textarea></div>
+            <div class="field"><label>Afternoon Shift (1:00 PM – 4:30 PM)</label><textarea class="tall" id="alii-setter-afternoon">Set up drinking stations with decanters and coffee cups.
+Set up the Fruit Station.
+Set up the Desserts/Gelato Station.
+Ice in the Soda Machines.
+At 2:30 PM: receive all food units from the runners.
+Notify manager if food units have not arrived by 2:35 PM.</textarea></div>
+          </div>
+        </div>
+
+        <div class="role-panel" id="alii-role-server">
+          <div class="field"><label>Role Description</label><textarea id="alii-server-desc">Servers are the face of the Ali'i Luau dining experience. Your interactions with guests define their memories of the evening. You represent the Spirit of Aloha with every plate served and every conversation shared.</textarea></div>
+          <div class="field-row">
+            <div class="field"><label>Key Responsibilities</label><textarea class="tall" id="alii-server-duties">Greet guests warmly and introduce yourself by name.
+Take drink orders and refill beverages proactively.
+Deliver food courses in sequence and according to guest count.
+Check for allergies and communicate to the kitchen.
+Monitor tables and address guest needs promptly.</textarea></div>
+            <div class="field"><label>Closing Duties</label><textarea class="tall" id="alii-server-close">Clear all tables after guests depart.
+Return all items to designated storage.
+Check the whiteboard for additional closing assignments.
+Report to your lead before clocking out.</textarea></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="output-area" id="alii-output">
+        <div class="output-box">
+          <div class="output-box-header">
+            <span class="output-box-title">📄 Updated alii-luau/index.html — Copy this and paste into GitHub</span>
+            <button class="btn-copy" id="alii-copy-btn" onclick="copyOutput('alii-code', 'alii-copy-btn')">Copy to Clipboard</button>
+          </div>
+          <div class="output-code" id="alii-code"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- GATEWAY EDITOR -->
+    <div class="page-editor" id="page-gateway">
+      <div class="page-header">
+        <h1>Gateway Buffet Page</h1>
+        <p>Edit the Gateway Buffet manager info and role SOPs.</p>
+      </div>
+      <div class="generate-bar">
+        <p>Edit any fields below then click Generate.</p>
+        <button class="btn-generate" onclick="generateGateway()">⚡ Generate Updated Page</button>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Management</div>
+        <div class="field-row">
+          <div class="field"><label>Manager Name</label><input type="text" id="gw-mgr" value="Nathaniel Gapol"></div>
+          <div class="field"><label>Assistant Manager</label><input type="text" id="gw-asst" value="Marianna Ah Quin"></div>
+        </div>
+        <div class="field"><label>Venue Description</label><textarea id="gw-desc">The Gateway Buffet is our expansive dining venue offering a wide variety of hot and cold Polynesian and American dishes. Serving up to 626 guests across morning and afternoon service, every team member plays a critical role in keeping the lines flowing and the guests smiling.</textarea></div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Quick Role Notes</div>
+        <p style="font-size:12px;color:var(--muted);margin-bottom:14px;">Update key duty changes for any role. These notes will appear in the role cards on the page.</p>
+        <div class="field"><label>Greeter & Scanner — Key Update</label><textarea id="gw-greeter-note" placeholder="e.g. Change in closing time or new procedure..."></textarea></div>
+        <div class="field"><label>Setter — Key Update</label><textarea id="gw-setter-note" placeholder="e.g. New linen sorting procedure..."></textarea></div>
+        <div class="field"><label>Hot Lines — Key Update</label><textarea id="gw-hot-note" placeholder="e.g. New FIFO enforcement note..."></textarea></div>
+        <div class="field"><label>Cold Lines — Key Update</label><textarea id="gw-cold-note" placeholder="e.g. Change in salad disposal schedule..."></textarea></div>
+        <div class="field"><label>Drinking Station — Key Update</label><textarea id="gw-drink-note" placeholder="e.g. New ice cream refill procedure..."></textarea></div>
+        <div class="field"><label>Scraper — Key Update</label><textarea id="gw-scraper-note" placeholder="e.g. New table arrangement..."></textarea></div>
+        <div class="field"><label>Server — Key Update</label><textarea id="gw-server-note" placeholder="e.g. New seating procedure..."></textarea></div>
+      </div>
+      <div class="output-area" id="gateway-output">
+        <div class="output-box">
+          <div class="output-box-header">
+            <span class="output-box-title">📄 Updated gateway-buffet/index.html — Copy and paste into GitHub</span>
+            <button class="btn-copy" id="gateway-copy-btn" onclick="copyOutput('gateway-code', 'gateway-copy-btn')">Copy to Clipboard</button>
+          </div>
+          <div class="output-code" id="gateway-code"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TEAM EDITOR -->
+    <div class="page-editor" id="page-team">
+      <div class="page-header">
+        <h1>Team / Org Chart Page</h1>
+        <p>Update leadership names, titles, and team information.</p>
+      </div>
+      <div class="generate-bar">
+        <p>Update any names or titles below then click Generate.</p>
+        <button class="btn-generate" onclick="generateTeam()">⚡ Generate Updated Page</button>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Executive Leadership</div>
+        <div class="field-row">
+          <div class="field"><label>President & CEO</label><input type="text" id="team-ceo" value="Alfred Grace"></div>
+          <div class="field"><label>Chief Operation Officer</label><input type="text" id="team-coo" value="Jarod Hester"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Vice President</label><input type="text" id="team-vp" value="Greg Maples"></div>
+          <div class="field"><label>VP Division</label><input type="text" id="team-vp-dept" value="Culinary & Retail Division"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Director of Dining Services</label><input type="text" id="team-director" value="Misty Rose Keanu"></div>
+        </div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Managers</div>
+        <div class="field-row">
+          <div class="field"><label>Hale Aloha Manager</label><input type="text" id="team-mgr-aloha" value="Vonnie Mata'afa"></div>
+          <div class="field"><label>Hale Ohana Manager</label><input type="text" id="team-mgr-ohana" value="Liana Apelu"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Gateway Buffet Manager</label><input type="text" id="team-mgr-gw" value="Nathaniel Gapol"></div>
+          <div class="field"><label>Gateway Asst. Manager</label><input type="text" id="team-mgr-gw-asst" value="Marianna Ah Quin"></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label>Kitchen Production Manager</label><input type="text" id="team-mgr-kitchen" value="Kofesina Menapula"></div>
+        </div>
+      </div>
+      <div class="output-area" id="team-output">
+        <div class="output-box">
+          <div class="output-box-header">
+            <span class="output-box-title">📄 Updated team/index.html — Copy and paste into GitHub</span>
+            <button class="btn-copy" id="team-copy-btn" onclick="copyOutput('team-code', 'team-copy-btn')">Copy to Clipboard</button>
+          </div>
+          <div class="output-code" id="team-code"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POLICIES EDITOR -->
+    <div class="page-editor" id="page-policies">
+      <div class="page-header">
+        <h1>Policies & Procedures Page</h1>
+        <p>Update any policies, procedures, or emergency protocols.</p>
+      </div>
+      <div class="generate-bar">
+        <p>Edit any policy content below then click Generate.</p>
+        <button class="btn-generate" onclick="generatePolicies()">⚡ Generate Updated Page</button>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Safety & Sanitation Intro</div>
+        <div class="field"><label>Introduction Text</label><textarea id="pol-intro">Maintaining safety and sanitation in the dining services area is essential to protect the health and well-being of both employees and customers. Clean and sanitary workspaces help prevent food contamination, foodborne illnesses, and workplace accidents. Consistent adherence to these standards reflects our organization's commitment to quality service and responsibility.</textarea></div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Hand Washing — When to Wash</div>
+        <div class="field"><textarea class="tall" id="pol-handwash">After using the restroom.
+After touching your hair, face, or body.
+After sneezing, coughing, or using a tissue.
+After eating or drinking.
+After handling chemicals that might affect food safety.
+After taking out garbage.
+After clearing tables or busing dirty dishes.
+After touching clothing or aprons.
+After touching anything that may contaminate hands.</textarea></div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Biohazard — Step-by-Step Response</div>
+        <div class="field"><textarea class="tall" id="pol-biohazard">1. Wear mask, disposable apron, and gloves.
+2. Get the wet floor sign and place it in the biohazard area.
+3. Pour crystal litter into the biohazard area and wait 3 minutes.
+4. Cover dustpan and brush with a trash bag.
+5. Sweep to clean the floor, ensuring no residue remains.
+6. Spray the floor with pine sol solution and wipe dry with paper towel.
+7. Tie and dispose of materials properly into the black bag.
+8. Dispose of your apron and gloves along with the biohazardous materials.
+9. Label the bag "Biohazard" for proper disposal.</textarea></div>
+      </div>
+      <div class="field-group">
+        <div class="field-group-title">Emergency Contact Note</div>
+        <div class="field"><label>Emergency Reminder Text</label><textarea id="pol-emergency">In Any Emergency: Always report immediately to your supervisor or manager. Do not handle serious incidents alone. Your safety and the safety of our guests is always the top priority. When in doubt, call your lead.</textarea></div>
+      </div>
+      <div class="output-area" id="policies-output">
+        <div class="output-box">
+          <div class="output-box-header">
+            <span class="output-box-title">📄 Updated policies/index.html — Copy and paste into GitHub</span>
+            <button class="btn-copy" id="policies-copy-btn" onclick="copyOutput('policies-code', 'policies-copy-btn')">Copy to Clipboard</button>
+          </div>
+          <div class="output-code" id="policies-code"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ Copied to clipboard!</div>
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page-editor').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+function showRole(page, role, btn) {
+  document.querySelectorAll('#page-' + page + ' .role-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('#page-' + page + ' .role-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(page + '-role-' + role).classList.add('active');
+  btn.classList.add('active');
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  if (!el) return '';
+  return (el.value || '').replace(/&amp;/g, '&').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function listItems(text) {
+  return text.split('\n').filter(l => l.trim()).map(l => `<li>${l.trim()}</li>`).join('\n              ');
+}
+
+function showOutput(outputId, codeId, html) {
+  const area = document.getElementById(outputId);
+  const code = document.getElementById(codeId);
+  area.classList.add('visible');
+  code.textContent = html;
+  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function copyOutput(codeId, btnId) {
+  const text = document.getElementById(codeId).textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById(btnId);
+    btn.textContent = '✅ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy to Clipboard'; btn.classList.remove('copied'); }, 2500);
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  });
+}
+
+function generateHome() {
+  const title = val('home-title');
+  const tagline = val('home-tagline');
+  const mottoH = val('home-motto-hawaiian');
+  const mottoE = val('home-motto-english');
+  const w1 = val('home-welcome1');
+  const quote = val('home-quote');
+  const w2 = val('home-welcome2');
+  const dirName = val('home-director-name');
+  const dirRole = val('home-director-role');
+  const dirMsg = val('home-director-msg');
+  const motto = val('home-motto');
+  const vision = val('home-vision');
+  const mission = val('home-mission');
+  const imuaI = val('home-imua-i');
+  const imuaM = val('home-imua-m');
+  const imuaU = val('home-imua-u');
+  const imuaA = val('home-imua-a');
+  const aliiDesc = val('home-alii-desc');
+  const aliiRoles = val('home-alii-roles').split(',').map(r => `<span class="role-chip">${r.trim()}</span>`).join('\n            ');
+  const gwDesc = val('home-gateway-desc');
+  const gwRoles = val('home-gateway-roles').split(',').map(r => `<span class="role-chip">${r.trim()}</span>`).join('\n            ');
+  const initials = dirName.split(' ').map(n=>n[0]).join('').slice(0,2);
+
+  const html = `<!-- HOME PAGE — Last updated ${new Date().toLocaleDateString()} -->
+<!-- To update: copy ALL of this, go to GitHub, open index.html, click pencil icon, select all, paste, commit -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${title} — Polynesian Cultural Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<section class="hero">
+  <div class="corner tl"></div><div class="corner tr"></div>
+  <div class="corner bl"></div><div class="corner br"></div>
+  <div class="hero-logo"><img src="assets/LOGO.svg" alt="Dining Services Logo" width="180" height="180" style="object-fit:contain;filter:drop-shadow(0 4px 24px rgba(184,145,42,0.35));"></div>
+  <h1 class="hero-title">${title}</h1>
+  <p class="hero-subtitle-dept">${tagline}</p>
+  <div class="hero-divider"></div>
+  <p class="hero-motto">${mottoE}</p>
+  <p class="hero-motto-hawaiian">${mottoH}</p>
+</section>
+<nav>
+  <div class="nav-inner">
+    <span class="nav-brand" style="display:flex;align-items:center;gap:10px;">
+      <img src="assets/LOGO.svg" alt="" width="36" height="36" style="object-fit:contain;">
+      Dining Services
+    </span>
+    <ul class="nav-links">
+      <li><a href="#intro">Welcome</a></li>
+      <li><a href="#kuleana">Our Kuleana</a></li>
+      <li><a href="#venues">Venues</a></li>
+      <li><a href="#standards">Standards</a></li>
+    </ul>
+  </div>
+</nav>
+<section id="intro"><div class="section"><div class="intro-grid">
+  <div class="fade-up">
+    <p class="section-eyebrow">Welcome</p>
+    <h2 class="section-title">Where Culture Meets Culinary Excellence</h2>
+    <p class="section-body">${w1}</p>
+    <blockquote class="intro-quote">"${quote}"</blockquote>
+    <p class="section-body">${w2}</p>
+  </div>
+  <div class="fade-up"><div class="director-card">
+    <div class="director-avatar">${initials}</div>
+    <p class="director-name">${dirName}</p>
+    <p class="director-role">${dirRole}</p>
+    <p class="director-message">${dirMsg}</p>
+  </div></div>
+</div></div></section>
+<section id="kuleana"><div class="section">
+  <div class="kuleana-header fade-up">
+    <p class="section-eyebrow">Our Kuleana</p>
+    <h2 class="section-title">Purpose, Vision &amp; Mission</h2>
+  </div>
+  <div class="fade-up">
+    <div class="mission-row">
+      <div class="mission-pill"><p class="mission-pill-label">Our Motto</p><p class="mission-pill-value">${motto}</p></div>
+      <div class="mission-pill"><p class="mission-pill-label">Our Vision</p><p class="mission-pill-value">${vision}</p></div>
+    </div>
+    <div class="mission-full">
+      <p class="mission-full-label">Our Mission</p>
+      <p class="mission-full-value">${mission}</p>
+    </div>
+    <div class="imua-grid">
+      <div class="imua-card"><div class="imua-letter">I</div><div class="imua-word">Integrate Beliefs</div><p class="imua-desc">${imuaI}</p></div>
+      <div class="imua-card"><div class="imua-letter">M</div><div class="imua-word">Magnify Employees</div><p class="imua-desc">${imuaM}</p></div>
+      <div class="imua-card"><div class="imua-letter">U</div><div class="imua-word">Uplift Guests</div><p class="imua-desc">${imuaU}</p></div>
+      <div class="imua-card"><div class="imua-letter">A</div><div class="imua-word">Achieve Excellence</div><p class="imua-desc">${imuaA}</p></div>
+    </div>
+  </div>
+</div></section>
+<section id="venues"><div class="section">
+  <div class="fade-up">
+    <p class="section-eyebrow">Our Dining Venues</p>
+    <h2 class="section-title">Two Exceptional Experiences</h2>
+    <p class="section-body">Our department operates two premier dining venues, each offering a distinct and memorable taste of Polynesia.</p>
+  </div>
+  <div class="venues-grid fade-up">
+    <div class="venue-card">
+      <div class="venue-header"><span class="venue-tag alii">Luau Dining</span><h3 class="venue-name">Ali'i Luau</h3><p class="venue-tagline">An Authentic Polynesian Luau Experience</p></div>
+      <div class="venue-body"><p class="venue-desc">${aliiDesc}</p><div class="venue-roles">${aliiRoles}</div></div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-header"><span class="venue-tag gateway">Buffet Dining</span><h3 class="venue-name">Gateway Buffet</h3><p class="venue-tagline">An Expansive Polynesian Buffet</p></div>
+      <div class="venue-body"><p class="venue-desc">${gwDesc}</p><div class="venue-roles">${gwRoles}</div></div>
+    </div>
+  </div>
+</div></section>
+<footer>
+  <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:16px;">
+    <img src="assets/LOGO.svg" alt="Logo" width="70" height="70" style="object-fit:contain;">
+  </div>
+  <p class="footer-logo">${mottoH}</p>
+  <p class="footer-sub">${mottoE}</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+<\/script>
+</body>
+</html>`;
+
+  showOutput('home-output', 'home-code', html);
+}
+
+function generateAlii() {
+  const mgrAloha = val('alii-mgr-aloha');
+  const mgrOhana = val('alii-mgr-ohana');
+  const capAloha = val('alii-cap-aloha');
+  const capOhana = val('alii-cap-ohana');
+
+  const roles = [
+    { id: 'lineman', name: 'Lineman', num: 1,
+      desc: val('alii-lineman-desc'),
+      open: listItems(document.getElementById('alii-lineman-open').value),
+      during: listItems(document.getElementById('alii-lineman-during').value),
+      close: listItems(document.getElementById('alii-lineman-close').value) },
+    { id: 'smoothie', name: 'Smoothie Station', num: 2,
+      desc: val('alii-smoothie-desc'),
+      script: val('alii-smoothie-script'),
+      open: '', during: listItems(document.getElementById('alii-smoothie-during').value),
+      close: listItems(document.getElementById('alii-smoothie-close').value) },
+    { id: 'dessert', name: 'Dessert & Gelato', num: 3,
+      desc: val('alii-dessert-desc'),
+      open: listItems(document.getElementById('alii-dessert-open').value),
+      during: listItems(document.getElementById('alii-dessert-during').value),
+      close: listItems(document.getElementById('alii-dessert-close').value) },
+    { id: 'greeter', name: 'Greeter & Scanner', num: 4,
+      desc: val('alii-greeter-desc'),
+      open: listItems(document.getElementById('alii-greeter-open').value),
+      during: listItems(document.getElementById('alii-greeter-during').value),
+      close: listItems(document.getElementById('alii-greeter-close').value) },
+    { id: 'scraper', name: 'Scraper', num: 5,
+      desc: val('alii-scraper-desc'),
+      open: listItems(document.getElementById('alii-scraper-open').value),
+      during: listItems(document.getElementById('alii-scraper-during').value),
+      close: listItems(document.getElementById('alii-scraper-close').value) },
+    { id: 'setter', name: 'Setter', num: 6,
+      desc: val('alii-setter-desc'),
+      open: listItems(document.getElementById('alii-setter-morning').value),
+      during: listItems(document.getElementById('alii-setter-afternoon').value),
+      close: '' },
+    { id: 'server', name: 'Server', num: 7,
+      desc: val('alii-server-desc'),
+      open: listItems(document.getElementById('alii-server-duties').value),
+      during: '', close: listItems(document.getElementById('alii-server-close').value) }
+  ];
+
+  const roleCards = roles.map(r => `
+    <div class="role-card fade-up">
+      <div class="role-header" onclick="toggleRole(this)">
+        <div class="role-header-left">
+          <div class="role-number">${r.num}</div>
+          <div class="role-name">${r.name}</div>
+        </div>
+        <div class="role-toggle">▼</div>
+      </div>
+      <div class="role-body">
+        <p class="role-desc">${r.desc}</p>
+        <div class="role-sections">
+          <div class="role-section"><div class="role-section-title">Opening</div><ul>${r.open}</ul></div>
+          <div class="role-section"><div class="role-section-title">During Operation</div><ul>${r.during}</ul></div>
+          <div class="role-section"><div class="role-section-title">Closing</div><ul>${r.close}</ul></div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  const html = `<!-- ALI'I LUAU PAGE — Last updated ${new Date().toLocaleDateString()} -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ali'i Luau — Dining Services | PCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <img src="../assets/LOGO.svg" alt="" width="36" height="36" style="object-fit:contain;">
+    <span style="font-family:'Playfair Display',serif;font-size:15px;color:#D4AB4E;font-style:italic;">Dining Services</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../alii-luau/index.html" style="color:#D4AB4E;">Ali'i Luau</a></li>
+    <li><a href="../gateway-buffet/index.html">Gateway Buffet</a></li>
+    <li><a href="../team/index.html">Team</a></li>
+    <li><a href="../policies/index.html">Policies</a></li>
+  </ul>
+</div></nav>
+<section class="hero" style="min-height:50vh;">
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  <p class="hero-eyebrow">Standard Operating Procedure</p>
+  <h1 class="hero-title">Ali'i Luau</h1>
+  <p class="hero-subtitle-dept" style="color:#D4AB4E;font-style:italic;">An Authentic Polynesian Evening Experience</p>
+  <div class="hero-divider"></div>
+  <div style="display:flex;gap:40px;justify-content:center;position:relative;z-index:1;margin-top:16px;">
+    <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:28px;color:#D4AB4E;">${parseInt(capAloha)+parseInt(capOhana)}+</div><div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,248,239,0.45);">Total Capacity</div></div>
+    <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:28px;color:#D4AB4E;">2</div><div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,248,239,0.45);">Venues</div></div>
+    <div style="text-align:center;"><div style="font-family:'Playfair Display',serif;font-size:28px;color:#D4AB4E;">7</div><div style="font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(253,248,239,0.45);">Roles</div></div>
+  </div>
+</section>
+<section style="background:#FFF9F1;border-bottom:1px solid rgba(184,145,42,0.1);">
+  <div class="section">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;" class="fade-up">
+      <div>
+        <p class="section-eyebrow">About</p>
+        <h2 class="section-title">Two Halls, One Spirit of Aloha</h2>
+        <p class="section-body">The Ali'i Luau is our signature evening dining event. We operate across two halls — Hale Aloha and Hale Ohana.</p>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px;">
+          <div style="background:white;border:1px solid rgba(184,145,42,0.2);border-radius:14px;padding:20px;">
+            <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#B8912A;margin-bottom:6px;">Hale Aloha</div>
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:#4A2E10;margin-bottom:4px;">${capAloha} Guests</div>
+            <div style="font-size:12px;color:#6B5240;">Manager: ${mgrAloha}</div>
+          </div>
+          <div style="background:white;border:1px solid rgba(184,145,42,0.2);border-radius:14px;padding:20px;">
+            <div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#B8912A;margin-bottom:6px;">Hale Ohana</div>
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:#4A2E10;margin-bottom:4px;">${capOhana} Guests</div>
+            <div style="font-size:12px;color:#6B5240;">Manager: ${mgrOhana}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section style="background:#FAF6EE;"><div class="section">
+  <div class="fade-up" style="max-width:680px;margin-bottom:48px;">
+    <p class="section-eyebrow">Roles & Responsibilities</p>
+    <h2 class="section-title">Know Your Role</h2>
+    <p class="section-body">Every team member plays a critical part in delivering the Ali'i Luau experience. Click any role to view its full responsibilities.</p>
+  </div>
+  ${roleCards}
+</div></section>
+<footer>
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#D4AB4E;text-decoration:none;margin-bottom:24px;opacity:0.7;">← Back to Home</a>
+  <p class="footer-logo">Me'a Ho'okipa</p>
+  <p class="footer-sub">Hospitality from the Heart</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+<script>
+  function toggleRole(h){const b=h.nextElementSibling,t=h.querySelector('.role-toggle');b.classList.toggle('open');t.classList.toggle('open');}
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.08});
+  document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+<\/script>
+</body></html>`;
+
+  showOutput('alii-output', 'alii-code', html);
+}
+
+function generateGateway() {
+  const mgr = val('gw-mgr');
+  const asst = val('gw-asst');
+  const desc = val('gw-desc');
+  const notes = {
+    greeter: val('gw-greeter-note'),
+    setter: val('gw-setter-note'),
+    hot: val('gw-hot-note'),
+    cold: val('gw-cold-note'),
+    drink: val('gw-drink-note'),
+    scraper: val('gw-scraper-note'),
+    server: val('gw-server-note')
+  };
+  const notesHtml = Object.entries(notes).filter(([k,v])=>v.trim()).map(([k,v])=>`<div style="background:#EBF5EE;border:1px solid rgba(45,90,61,0.15);border-radius:10px;padding:14px;margin-bottom:10px;"><div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#2D5A3D;margin-bottom:6px;">${k.toUpperCase()} — UPDATE NOTE</div><p style="font-size:13px;color:#4A2E10;line-height:1.6;">${v}</p></div>`).join('');
+
+  const html = `<!-- GATEWAY BUFFET PAGE — Last updated ${new Date().toLocaleDateString()} -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gateway Buffet — Dining Services | PCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <img src="../assets/LOGO.svg" alt="" width="36" height="36" style="object-fit:contain;">
+    <span style="font-family:'Playfair Display',serif;font-size:15px;color:#D4AB4E;font-style:italic;">Dining Services</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../alii-luau/index.html">Ali'i Luau</a></li>
+    <li><a href="../gateway-buffet/index.html" style="color:#D4AB4E;">Gateway Buffet</a></li>
+    <li><a href="../team/index.html">Team</a></li>
+    <li><a href="../policies/index.html">Policies</a></li>
+  </ul>
+</div></nav>
+<section class="hero" style="min-height:50vh;background:linear-gradient(160deg,#0E1A0E,#1A2E14,#1F3A18);">
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  <p class="hero-eyebrow" style="color:#7DBF95;">Standard Operating Procedure</p>
+  <h1 class="hero-title">Gateway Buffet</h1>
+  <p class="hero-subtitle-dept" style="color:#7DBF95;font-style:italic;">Quality Food, Safe Hands &amp; True Aloha in Every Serving</p>
+  <div class="hero-divider" style="background:linear-gradient(90deg,transparent,#7DBF95,transparent);"></div>
+</section>
+<section style="background:#F1F8F3;border-bottom:1px solid rgba(45,90,61,0.1);">
+  <div class="section fade-up">
+    <p class="section-eyebrow" style="color:#4A8C63;">About</p>
+    <h2 class="section-title">PCC's Largest Dining Venue</h2>
+    <p class="section-body">${desc}</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:20px;">
+      <div style="background:white;border:1px solid rgba(45,90,61,0.15);border-radius:16px;padding:20px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#4A8C63;margin-bottom:6px;">Manager</div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;color:#4A2E10;">${mgr}</div>
+      </div>
+      <div style="background:white;border:1px solid rgba(45,90,61,0.15);border-radius:16px;padding:20px;">
+        <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#4A8C63;margin-bottom:6px;">Assistant Manager</div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;color:#4A2E10;">${asst}</div>
+      </div>
+    </div>
+    ${notesHtml ? `<div style="margin-top:28px;"><div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#4A8C63;margin-bottom:14px;">Recent Updates</div>${notesHtml}</div>` : ''}
+  </div>
+</section>
+<section style="background:#FAF6EE;"><div class="section">
+  <div class="fade-up" style="max-width:680px;margin-bottom:40px;">
+    <p class="section-eyebrow" style="color:#4A8C63;">Roles & Responsibilities</p>
+    <h2 class="section-title">Know Your Role</h2>
+    <p class="section-body">See the full SOPs for each role in the current version of your handbook or the previous Gateway Buffet page.</p>
+  </div>
+</div></section>
+<footer>
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#D4AB4E;text-decoration:none;margin-bottom:24px;opacity:0.7;">← Back to Home</a>
+  <p class="footer-logo">Me'a Ho'okipa</p>
+  <p class="footer-sub">Hospitality from the Heart</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+</body></html>`;
+
+  showOutput('gateway-output', 'gateway-code', html);
+}
+
+function generateTeam() {
+  const ceo = val('team-ceo');
+  const coo = val('team-coo');
+  const vp = val('team-vp');
+  const vpDept = val('team-vp-dept');
+  const dir = val('team-director');
+  const mgrAloha = val('team-mgr-aloha');
+  const mgrOhana = val('team-mgr-ohana');
+  const mgrGw = val('team-mgr-gw');
+  const mgrGwAsst = val('team-mgr-gw-asst');
+  const mgrKitchen = val('team-mgr-kitchen');
+
+  const html = `<!-- TEAM PAGE — Last updated ${new Date().toLocaleDateString()} -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Team — Dining Services | PCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <img src="../assets/LOGO.svg" alt="" width="36" height="36" style="object-fit:contain;">
+    <span style="font-family:'Playfair Display',serif;font-size:15px;color:#D4AB4E;font-style:italic;">Dining Services</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../alii-luau/index.html">Ali'i Luau</a></li>
+    <li><a href="../gateway-buffet/index.html">Gateway Buffet</a></li>
+    <li><a href="../team/index.html" style="color:#D4AB4E;">Team</a></li>
+    <li><a href="../policies/index.html">Policies</a></li>
+  </ul>
+</div></nav>
+<section class="hero" style="min-height:40vh;">
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  <p class="hero-eyebrow">Organizational Chart</p>
+  <h1 class="hero-title">Meet Our Team</h1>
+  <p class="hero-subtitle-dept" style="color:#D4AB4E;font-style:italic;">One 'Ohana, One Mission</p>
+</section>
+<section style="background:#FFF9F1;"><div class="section">
+  <div style="text-align:center;max-width:640px;margin:0 auto 48px;" class="fade-up">
+    <p class="section-eyebrow" style="justify-content:center;">Leadership</p>
+    <h2 class="section-title">Organizational Chart</h2>
+  </div>
+  <div class="fade-up" style="max-width:700px;margin:0 auto;">
+    ${[
+      [ceo, 'President & CEO', 'Polynesian Cultural Center', '#B8912A'],
+      [coo, 'Chief Operation Officer', 'Polynesian Cultural Center', '#4A2E10'],
+      [vp, `Vice President — ${vpDept}`, '', '#C47B6A'],
+      [dir, 'Director of Dining Services', 'Dining Services Dept.', '#B8912A']
+    ].map(([name, role, dept, color]) => {
+      const initials = name.split(' ').map(n=>n[0]).join('').slice(0,2);
+      return `<div style="display:flex;flex-direction:column;align-items:center;">
+        <div style="background:white;border:1px solid rgba(184,145,42,0.2);border-radius:16px;padding:20px 24px;text-align:center;width:220px;margin-bottom:0;">
+          <div style="width:52px;height:52px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:18px;color:white;margin:0 auto 12px;">${initials}</div>
+          <div style="font-family:'Playfair Display',serif;font-size:15px;color:#4A2E10;margin-bottom:4px;">${name}</div>
+          <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#B8912A;line-height:1.4;">${role}</div>
+          ${dept ? `<div style="font-size:11px;color:#6B5240;margin-top:4px;">${dept}</div>` : ''}
+        </div>
+        <div style="width:1px;height:24px;background:rgba(184,145,42,0.3);"></div>
+      </div>`;
+    }).join('')}
+    <div style="display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:4px;">
+      ${[
+        [mgrAloha, 'Hale Aloha Manager', 'Ali\'i Luau', '#C47B6A'],
+        [mgrOhana, 'Hale Ohana Manager', 'Ali\'i Luau', '#B8912A'],
+        [mgrGw, 'Gateway Buffet Manager', 'Gateway Buffet', '#4A2E10'],
+        [mgrGwAsst, 'Asst. Manager', 'Gateway Buffet', '#C47B6A'],
+        [mgrKitchen, 'Kitchen Production Manager', 'Kitchen Production', '#2D5A3D']
+      ].map(([name, role, dept, color]) => {
+        const initials = name.split(' ').map(n=>n[0]).join('').slice(0,2);
+        return `<div style="display:flex;flex-direction:column;align-items:center;">
+          <div style="width:1px;height:20px;background:rgba(184,145,42,0.3);"></div>
+          <div style="background:white;border:1px solid rgba(184,145,42,0.15);border-radius:14px;padding:16px;text-align:center;width:160px;">
+            <div style="width:44px;height:44px;border-radius:50%;background:${color};display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:15px;color:white;margin:0 auto 10px;">${initials}</div>
+            <div style="font-family:'Playfair Display',serif;font-size:13px;color:#4A2E10;margin-bottom:3px;">${name}</div>
+            <div style="font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#B8912A;">${role}</div>
+            <div style="font-size:10px;color:#6B5240;margin-top:3px;">${dept}</div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+</div></section>
+<footer>
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#D4AB4E;text-decoration:none;margin-bottom:24px;opacity:0.7;">← Back to Home</a>
+  <p class="footer-logo">Me'a Ho'okipa</p>
+  <p class="footer-sub">Hospitality from the Heart</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+<script>
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.08});
+  document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+<\/script>
+</body></html>`;
+
+  showOutput('team-output', 'team-code', html);
+}
+
+function generatePolicies() {
+  const intro = val('pol-intro');
+  const handwash = listItems(document.getElementById('pol-handwash').value);
+  const biohazard = listItems(document.getElementById('pol-biohazard').value);
+  const emergency = val('pol-emergency');
+
+  const html = `<!-- POLICIES PAGE — Last updated ${new Date().toLocaleDateString()} -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Policies & Procedures — Dining Services | PCC</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+<nav><div class="nav-inner">
+  <a href="../index.html" class="nav-brand" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+    <img src="../assets/LOGO.svg" alt="" width="36" height="36" style="object-fit:contain;">
+    <span style="font-family:'Playfair Display',serif;font-size:15px;color:#D4AB4E;font-style:italic;">Dining Services</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="../index.html">Home</a></li>
+    <li><a href="../alii-luau/index.html">Ali'i Luau</a></li>
+    <li><a href="../gateway-buffet/index.html">Gateway Buffet</a></li>
+    <li><a href="../team/index.html">Team</a></li>
+    <li><a href="../policies/index.html" style="color:#D4AB4E;">Policies</a></li>
+  </ul>
+</div></nav>
+<section class="hero" style="min-height:40vh;background:linear-gradient(160deg,#0A1520,#1A2E45,#1F3A58);">
+  <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+  <p class="hero-eyebrow" style="color:#7BB5DC;">Dining Services</p>
+  <h1 class="hero-title">Policies & Procedures</h1>
+  <p class="hero-subtitle-dept" style="color:#7BB5DC;font-style:italic;">Safety, Sanitation & Operational Standards</p>
+</section>
+<section style="background:#F2F7FC;"><div class="section">
+  <div class="fade-up">
+    <p class="section-eyebrow" style="color:#2E5F8A;">Safety & Sanitation</p>
+    <h2 class="section-title">Keeping Our Team & Guests Safe</h2>
+    <p class="section-body">${intro}</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:32px;" class="fade-up">
+    <div style="background:white;border:1px solid rgba(46,95,138,0.12);border-radius:16px;padding:24px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#2E5F8A;margin-bottom:14px;">When to Wash Your Hands</div>
+      <ul style="list-style:none;padding:0;">${handwash}</ul>
+    </div>
+    <div style="background:white;border:1px solid rgba(180,50,50,0.12);border-radius:16px;padding:24px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:#C0392B;margin-bottom:14px;">Biohazard Response Steps</div>
+      <ul style="list-style:none;padding:0;">${biohazard}</ul>
+    </div>
+  </div>
+  <div style="background:linear-gradient(135deg,#FAEBEB,#FDF5F5);border:1px solid rgba(180,50,50,0.2);border-radius:16px;padding:20px 24px;margin-top:24px;display:flex;gap:16px;align-items:flex-start;" class="fade-up">
+    <div style="font-size:24px;flex-shrink:0;">📞</div>
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-size:16px;color:#C0392B;margin-bottom:6px;">In Any Emergency</div>
+      <div style="font-size:13px;line-height:1.6;color:#6B5240;">${emergency}</div>
+    </div>
+  </div>
+</div></section>
+<footer>
+  <a href="../index.html" style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:#D4AB4E;text-decoration:none;margin-bottom:24px;opacity:0.7;">← Back to Home</a>
+  <p class="footer-logo">Me'a Ho'okipa</p>
+  <p class="footer-sub">Hospitality from the Heart</p>
+  <div class="footer-divider"></div>
+  <p class="footer-copy">Dining Services &amp; Kitchen Production · Polynesian Cultural Center · 2026</p>
+</footer>
+<script>
+  const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');}),{threshold:0.08});
+  document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+<\/script>
+</body></html>`;
+
+  showOutput('policies-output', 'policies-code', html);
+}
+</script>
+</body>
+</html>
