@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leadership Handbook — Dining Services & Kitchen Production</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #c9a96e;
+      --gold-light: #e8d5b0;
+      --cream: #fdf8f2;
+      --dark: #1a1208;
+      --brown: #6b4c2a;
+      --rose: #c97b7b;
+      --green: #4a7c59;
+      --section-bg: #fff9f2;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Josefin Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px;
+      background:
+        radial-gradient(ellipse at 20% 80%, rgba(201,169,110,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 20%, rgba(201,123,123,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, rgba(74,124,89,0.06) 0%, transparent 70%),
+        var(--cream);
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a96e' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+
+    .border-frame {
+      position: absolute;
+      inset: 20px;
+      border: 1.5px solid var(--gold);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+    .border-frame::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 0.5px solid var(--gold);
+      opacity: 0.5;
+    }
+    .corner { position: absolute; width: 20px; height: 20px; border-color: var(--gold); border-style: solid; opacity: 0.7; }
+    .corner.tl { top: 18px; left: 18px; border-width: 2px 0 0 2px; }
+    .corner.tr { top: 18px; right: 18px; border-width: 2px 2px 0 0; }
+    .corner.bl { bottom: 18px; left: 18px; border-width: 0 0 2px 2px; }
+    .corner.br { bottom: 18px; right: 18px; border-width: 0 2px 2px 0; }
+
+    .hero-badge {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 9vw, 100px);
+      font-weight: 300;
+      line-height: 1.0;
+      color: var(--dark);
+      margin-bottom: 16px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.4s forwards;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--brown);
+    }
+
+    .hero-sub {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.6s forwards;
+    }
+
+    .lei-icon {
+      font-size: 56px;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 0.1s forwards;
+      filter: drop-shadow(0 4px 12px rgba(201,169,110,0.3));
+    }
+
+    .hero-tagline {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--brown);
+      max-width: 480px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.9s ease 0.8s forwards;
+    }
+
+    .hero-year {
+      font-size: 11px;
+      letter-spacing: 5px;
+      color: #aaa;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1s forwards;
+    }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 0.8s ease 1.4s forwards;
+    }
+    .scroll-hint span { font-size: 10px; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
+    .scroll-line { width: 1px; height: 40px; background: linear-gradient(to bottom, var(--gold), transparent); animation: scrollPulse 2s ease infinite; }
+
+    /* ── NAV ── */
+    .main-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--dark);
+      border-bottom: 1px solid rgba(184,145,42,0.25);
+      padding: 0 40px;
+    }
+    .secondary-nav {
+      position: sticky;
+      top: 54px;
+      z-index: 99;
+      background: var(--section-bg);
+      border-bottom: 1px solid rgba(201,169,110,0.1);
+      padding: 0 40px;
+      margin-bottom: 20px;
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 54px;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-brand img {
+      width: 36px;
+      height: 36px;
+      object-fit: contain;
+    }
+    .nav-brand span {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      color: var(--gold-light);
+      font-style: italic;
+    }
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--brown);
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 10px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: rgba(253,248,239,0.6);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .secondary-nav .nav-links a {
+      color: var(--dark);
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* ── SECTIONS ── */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 100px 40px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 60px);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--dark);
+      margin-bottom: 40px;
+    }
+    .section-title em { font-style: italic; color: var(--brown); }
+
+    .divider {
+      width: 60px;
+      height: 1px;
+      background: var(--gold);
+      margin-bottom: 40px;
+    }
+
+    /* ── LEADERSHIP SECTION ── */
+    #leadership {
+      background: var(--section-bg);
+      padding: 100px 0;
+    }
+    .leadership-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+    .leadership-text p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      line-height: 1.75;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    .checklist {
+      background: #fff;
+      border: 1px solid rgba(201,169,110,0.25);
+      border-radius: 2px;
+      padding: 32px;
+      position: relative;
+    }
+    .checklist::before {
+      content: 'Leadership Self-Assessment';
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 20px;
+    }
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      font-size: 12px;
+      line-height: 1.5;
+      color: #555;
+      letter-spacing: 0.3px;
+    }
+    .check-item:last-child { border-bottom: none; }
+    .check-box {
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--gold);
+      flex-shrink: 0;
+      margin-top: 1px;
+      position: relative;
+    }
+
+    /* ── ACCOUNTABILITY ── */
+    .pyramid-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 40px;
+    }
+    .pcard {
+      padding: 32px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .pcard:hover { transform: translateY(-4px); }
+    .pcard:nth-child(1) { background: #e8f4ed; }
+    .pcard:nth-child(2) { background: #f0ebe2; }
+    .pcard:nth-child(3) { background: #f5e8e8; }
+    .pcard:nth-child(4) { background: #e2ebf5; }
+    .pcard-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-weight: 300;
+      opacity: 0.15;
+      position: absolute;
+      top: 10px;
+      right: 16px;
+    }
+    .pcard-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .pcard-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .pcard-q {
+      font-size: 12px;
+      color: #666;
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    /* ── VENUES ── */
+    .venue-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 0;
+      border-bottom: 2px solid rgba(201,169,110,0.2);
+    }
+    .tab-btn {
+      padding: 14px 28px;
+      border: none;
+      background: none;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #999;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      color: var(--brown);
+      border-bottom-color: var(--gold);
+    }
+    .tab-content { display: none; padding-top: 40px; }
+    .tab-content.active { display: block; }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .role-card {
+      border: 1px solid rgba(201,169,110,0.2);
+      background: #fff;
+      padding: 28px;
+      transition: box-shadow 0.3s, transform 0.3s;
+    }
+    .role-card:hover {
+      box-shadow: 0 8px 32px rgba(201,169,110,0.15);
+      transform: translateY(-2px);
+    }
+    .role-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--dark);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(201,169,110,0.2);
+    }
+    .role-phase {
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin: 14px 0 8px;
+    }
+    .role-items { list-style: none; }
+    .role-items li {
+      font-size: 12px;
+      color: #555;
+      padding: 4px 0 4px 14px;
+      position: relative;
+      line-height: 1.5;
+    }
+    .role-items li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--gold);
+      opacity: 0.6;
+    }
+
+    /* ── GUEST INTERACTION ── */
+    #guest {
+      background: linear-gradient(135deg, #1a1208 0%, #2d1f0e 100%);
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #guest::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23c9a96e' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    #guest .section-label { color: var(--gold-light); }
+    #guest .section-title { color: #fff; }
+    #guest .divider { background: var(--gold); }
+
+    .aloha-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(201,169,110,0.15);
+      margin-top: 40px;
+    }
+    .aloha-card {
+      background: rgba(255,255,255,0.04);
+      padding: 36px 28px;
+      transition: background 0.3s;
+    }
+    .aloha-card:hover { background: rgba(255,255,255,0.08); }
+    .aloha-icon { font-size: 28px; margin-bottom: 16px; }
+    .aloha-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+    .aloha-card p { font-size: 13px; color: rgba(255,255,255,0.6); line-height: 1.7; }
+
+    .body-tips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 40px;
+    }
+    .tip-chip {
+      background: rgba(201,169,110,0.12);
+      border: 1px solid rgba(201,169,110,0.25);
+      padding: 8px 18px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+
+    /* ── KITCHEN ── */
+    .kitchen-roles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .kitchen-card {
+      background: #fff;
+      border-top: 3px solid var(--gold);
+      padding: 24px;
+      transition: box-shadow 0.3s;
+    }
+    .kitchen-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,0.08); }
+    .kitchen-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: var(--dark);
+      margin-bottom: 12px;
+    }
+    .kitchen-card p { font-size: 12px; color: #666; line-height: 1.6; }
+
+    /* ── QUOTE ── */
+    .quote-block {
+      text-align: center;
+      padding: 80px 40px;
+      background: var(--section-bg);
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(24px, 4vw, 42px);
+      font-style: italic;
+      font-weight: 300;
+      color: var(--dark);
+      max-width: 700px;
+      margin: 0 auto 20px;
+      line-height: 1.4;
+    }
+    .quote-attr {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── ASSESSMENT ── */
+    .assessment-intro {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      color: #555;
+      line-height: 1.7;
+      max-width: 700px;
+      font-style: italic;
+      margin-bottom: 40px;
+    }
+    .scale-legend {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .scale-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .scale-dot {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .scale-item span { font-size: 11px; color: #666; letter-spacing: 1px; }
+    .assessment-questions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    .q-item {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.06);
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      transition: border-color 0.2s;
+    }
+    .q-item:hover { border-color: var(--gold); }
+    .q-num {
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      flex-shrink: 0;
+    }
+    .q-text { font-size: 12px; color: #444; flex: 1; line-height: 1.4; }
+    .q-scale {
+      display: flex;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .q-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(201,169,110,0.4);
+      transition: background 0.2s, border-color 0.2s;
+      cursor: pointer;
+      display: inline-block;
+    }
+    .q-radio { display: none; }
+    .q-radio:checked + .q-dot {
+      background: var(--gold);
+      border-color: var(--gold);
+    }
+    .q-dot:hover { background: var(--gold); border-color: var(--gold); }
+
+    /* ── ASSESSMENT ACTIONS ── */
+    .assessment-actions {
+      text-align: center;
+      margin-top: 40px;
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .submit-btn, .reset-btn {
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      padding: 14px 32px;
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 2px;
+    }
+    .submit-btn:hover, .reset-btn:hover {
+      background: var(--brown);
+      color: #fff;
+    }
+    .reset-btn {
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--gold);
+    }
+    .reset-btn:hover {
+      background: var(--gold);
+      color: var(--dark);
+    }
+
+    /* ── RESULT BOX ── */
+    .result-box {
+      background: #fff;
+      border: 1px solid rgba(201,169,110,0.2);
+      border-radius: 2px;
+      padding: 32px;
+      text-align: center;
+      margin-top: 40px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .result-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      color: var(--dark);
+      margin-bottom: 20px;
+    }
+    .score-display {
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .score-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 48px;
+      font-weight: 300;
+      color: var(--gold);
+    }
+    .score-max {
+      font-size: 16px;
+      color: #666;
+    }
+    .score-interpretation {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--dark);
+      color: rgba(255,255,255,0.5);
+      text-align: center;
+      padding: 60px 40px;
+    }
+    footer .lei { font-size: 36px; margin-bottom: 16px; display: block; }
+    footer .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--gold);
+      font-style: italic;
+      display: block;
+      margin-bottom: 6px;
+    }
+    footer .tagline {
+      font-size: 10px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 30px;
+      display: block;
+    }
+    footer .year {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 1; transform: scaleY(1); }
+      50%       { opacity: 0.4; transform: scaleY(0.6); }
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 768px) {
+      .leadership-grid { grid-template-columns: 1fr; }
+      .pyramid-cards { grid-template-columns: repeat(2, 1fr); }
+      .aloha-grid { grid-template-columns: 1fr; }
+      .assessment-questions { grid-template-columns: 1fr; }
+      .main-nav, .secondary-nav { padding: 0 20px; }
+      .nav-links { display: none; }
+      .section { padding: 60px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="border-frame"></div>
+  <div class="corner tl"></div>
+  <div class="corner tr"></div>
+  <div class="corner bl"></div>
+  <div class="corner br"></div>
+
+  <div class="lei-icon">🌺</div>
+  <p class="hero-badge">Dining Services & Kitchen Production</p>
+  <h1><em>Leadership</em><br>Handbook</h1>
+  <p class="hero-sub">Me'a Ho'okipa · Hospitality from the Heart</p>
+  <p class="hero-tagline">"The best way to find yourself is to lose yourself in the service of others."</p>
+  <p class="hero-year">2026 Edition</p>
+
+  <div class="scroll-hint">
+    <span>Explore</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+
+<!-- NAV -->
+<nav class="main-nav">
+  <div class="nav-inner">
+    <a href="../index.html" class="nav-brand">
+      <img src="/assets/LOGO.svg" alt="PCC Dining Services">
+      <span>Leadership Handbook</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../alii-luau/index.html" class="active">Ali'i Luau</a></li>
+      <li><a href="../gateway-buffet/index.html">Gateway Buffet</a></li>
+      <li><a href="../team/index.html">Team</a></li>
+      <li><a href="../policies/index.html">Policies</a></li>
+      <li><a href="../leads-training/index.html">Leads Training</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── NAV ── -->
+<nav class="secondary-nav">
+  <div class="nav-inner">
+    <span class="nav-logo">Leadership Handbook</span>
+    <ul class="nav-links">
+      <li><a href="#leadership">Leadership</a></li>
+      <li><a href="#accountability">Accountability</a></li>
+      <li><a href="#venues">Venues</a></li>
+      <li><a href="#guest">Guest Interaction</a></li>
+      <li><a href="#kitchen">Kitchen</a></li>
+      <li><a href="#assessment">Assessment</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ── LEADERSHIP INTRO ── -->
+<section id="leadership">
+  <div class="section">
+    <p class="section-label reveal">Introduction</p>
+    <h2 class="section-title reveal"><em>Leadership</em><br>begins with example</h2>
+    <div class="divider reveal"></div>
+
+    <div class="leadership-grid">
+      <div class="leadership-text reveal">
+        <p>True leadership is rooted in serving others. Service is the foundation of our standard.</p>
+        <p>As a leader in Dining Services, it is our responsibility to exemplify excellence through consistency, discipline, and humility — even during the busiest and most demanding shifts.</p>
+        <p>The standard is not defined by what we say, but by what we repeatedly demonstrate. When leaders embody professionalism and accountability, they create clarity, stability, and trust within the team.</p>
+        <p style="font-style:italic; color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size:18px;">What you model each shift becomes the culture others follow.</p>
+      </div>
+
+      <div class="checklist reveal">
+        <div class="check-item"><div class="check-box"></div>Arrive prepared for every shift — on time, in full uniform, and ready to serve alongside the team.</div>
+        <div class="check-item"><div class="check-box"></div>Set the tone at the beginning of each shift through professionalism and positive energy.</div>
+        <div class="check-item"><div class="check-box"></div>Follow all food safety and sanitation standards consistently — even during peak hours.</div>
+        <div class="check-item"><div class="check-box"></div>Demonstrate that excellence is not dependent on convenience or workload.</div>
+        <div class="check-item"><div class="check-box"></div>Maintain composure under pressure, especially during rush periods.</div>
+        <div class="check-item"><div class="check-box"></div>Communicate respectfully with team members, guests, and supervisors at all times.</div>
+        <div class="check-item"><div class="check-box"></div>Step in to support operations when needed rather than leading from the sidelines.</div>
+        <div class="check-item"><div class="check-box"></div>Take ownership of mistakes and focus on solutions instead of blame.</div>
+        <div class="check-item"><div class="check-box"></div>Model consistency in attitude, urgency, and quality every day.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACCOUNTABILITY ── -->
+<section id="accountability" style="padding: 0; background: var(--cream);">
+  <div class="section">
+    <p class="section-label reveal">Culture of Accountability</p>
+    <h2 class="section-title reveal">Steps to <em>Accountability</em></h2>
+    <div class="divider reveal"></div>
+    <p class="reveal" style="font-size:14px; color:#666; max-width:600px; line-height:1.8; margin-bottom: 40px;">Success comes when individuals and teams choose to move above the line — seeing reality clearly, owning their role, solving problems, and taking action.</p>
+
+    <div class="pyramid-cards reveal">
+      <div class="pcard">
+        <span class="pcard-num">1</span>
+        <p class="pcard-label">Step One</p>
+        <h3 class="pcard-title">See It</h3>
+        <p class="pcard-q">What is the reality we most need to acknowledge?</p>
+      </div>
+      <div class="pcard">
+        <span class="pcard-num">2</span>
+        <p class="pcard-label">Step Two</p>
+        <h3 class="pcard-title">Own It</h3>
+        <p class="pcard-q">How are we contributing to close the gap?</p>
+      </div>
+      <div class="pcard">
+        <span class="pcard-num">3</span>
+        <p class="pcard-label">Step Three</p>
+        <h3 class="pcard-title">Solve It</h3>
+        <p class="pcard-q">What else can we do to close the gap?</p>
+      </div>
+      <div class="pcard">
+        <span class="pcard-num">4</span>
+        <p class="pcard-label">Step Four</p>
+        <h3 class="pcard-title">Do It</h3>
+        <p class="pcard-q">Who is accountable to do what and by when?</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px;" class="reveal">
+      <div style="background:#fff; border-left: 3px solid var(--green); padding: 24px;">
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color: var(--green); margin-bottom:10px;">Above the Line</p>
+        <p style="font-size:13px; color:#555; line-height:1.7;">People focus on results, solutions, and what they can control. They take ownership and drive change.</p>
+      </div>
+      <div style="background:#fff; border-left: 3px solid var(--rose); padding: 24px;">
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color: var(--rose); margin-bottom:10px;">Below the Line</p>
+        <p style="font-size:13px; color:#555; line-height:1.7;">People blame others, make excuses, or avoid responsibility. This mindset stalls growth and hurts the team.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VENUES ── -->
+<section id="venues" style="background: var(--section-bg); padding: 0;">
+  <div class="section">
+    <p class="section-label reveal">Standard Performance</p>
+    <h2 class="section-title reveal">Dining <em>Venues</em><br>& Lead Roles</h2>
+    <div class="divider reveal"></div>
+
+    <div class="venue-tabs reveal">
+      <button class="tab-btn active" onclick="switchTab('alii')">Ali'i Luau</button>
+      <button class="tab-btn" onclick="switchTab('gateway')">Gateway Buffet</button>
+    </div>
+
+    <!-- ALI'I LUAU -->
+    <div id="tab-alii" class="tab-content active">
+      <div class="roles-grid">
+        <div class="role-card">
+          <h3>🌸 Front Lead</h3>
+          <p class="role-phase">Opening</p>
+          <ul class="role-items">
+            <li>Check attendance before prayer meeting; report no-shows</li>
+            <li>Verify Dress & Grooming of all workers</li>
+            <li>Brief servers and greeters on announcements</li>
+            <li>Complete Jolt Checklist for Opening</li>
+          </ul>
+          <p class="role-phase">During Operations</p>
+          <ul class="role-items">
+            <li>Help with seating; ensure SOP compliance</li>
+            <li>Guest requests delivered within 3 minutes</li>
+            <li>Smoothies offered during dinner service</li>
+            <li>Decanters must be refilled</li>
+          </ul>
+          <p class="role-phase">Closing</p>
+          <ul class="role-items">
+            <li>All plates & utensils to the back by 6:40 PM</li>
+            <li>Wipe tabletops; collect salt & pepper shakers</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <h3>🍽️ Line Lead</h3>
+          <p class="role-phase">Opening</p>
+          <ul class="role-items">
+            <li>Check attendance & Dress/Grooming standards</li>
+            <li>Meet with line workers before opening</li>
+            <li>Complete Jolt Checklist</li>
+          </ul>
+          <p class="role-phase">During Operations</p>
+          <ul class="role-items">
+            <li>Check presentation of buffet, fruit & carving stations</li>
+            <li>Food pans refilled timely — not left nearly empty</li>
+            <li>No loose items; workers in complete uniform</li>
+            <li>Interact warmly with guests while directing lines</li>
+          </ul>
+          <p class="role-phase">Closing</p>
+          <ul class="role-items">
+            <li>First buffet line closed after the cultural dance</li>
+            <li>Confirm valves closed; no loose items left</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <h3>🔥 Back Lead</h3>
+          <p class="role-phase">During Operations</p>
+          <ul class="role-items">
+            <li>Prioritize checking delivered food for quality</li>
+            <li>Check hot food temperature every hour</li>
+            <li>Ensure food is run within 3 minutes</li>
+            <li>Prepare kids' meals and birthday plates</li>
+          </ul>
+          <p class="role-phase">Closing</p>
+          <ul class="role-items">
+            <li>Set up make-plate table at 6:15 PM</li>
+            <li>Remove all food from back units by 6:30 PM</li>
+            <li>Pack food for "Aloha Harvest"</li>
+            <li>Wash and dry floors; ensure drains are clean</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <h3>🥤 Smoothie Lead</h3>
+          <p class="role-phase">Opening</p>
+          <ul class="role-items">
+            <li>Check assignment board; count pineapple shells</li>
+            <li>Prepare desserts; keep cold to maintain temp</li>
+            <li>All items ready before 4:25 PM</li>
+          </ul>
+          <p class="role-phase">During Operations</p>
+          <ul class="role-items">
+            <li>Pineapple smoothies in front by 4:25 PM</li>
+            <li>Desserts displayed by 4:30 PM</li>
+            <li>Monitor gelato station; order backups before 5:30 PM</li>
+          </ul>
+          <p class="role-phase">Closing</p>
+          <ul class="role-items">
+            <li>Sanitize dessert tables and stands</li>
+            <li>Coffee machines washed and sanitized</li>
+            <li>Do assignment board for tomorrow's schedule</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- GATEWAY BUFFET -->
+    <div id="tab-gateway" class="tab-content">
+      <div class="roles-grid">
+        <div class="role-card">
+          <h3>🌸 Front Lead</h3>
+          <p class="role-phase">Opening</p>
+          <ul class="role-items">
+            <li>Check attendance; report no-shows to supervisor</li>
+            <li>Verify Dress & Grooming standards</li>
+            <li>Servers in line at front door ready by 4:29 PM</li>
+            <li>Complete Jolt Checklist</li>
+          </ul>
+          <p class="role-phase">During Operations</p>
+          <ul class="role-items">
+            <li>Assist with seating and ensure smooth table flow</li>
+            <li>Guest requests fulfilled within 3 minutes</li>
+            <li>Stamp and give discount coupons to servers</li>
+            <li>Ensure robots' pathways are clear at all times</li>
+          </ul>
+          <p class="role-phase">Closing</p>
+          <ul class="role-items">
+            <li>Inform guests line closes at 7:00 PM</li>
+            <li>Make plate at 7:05–7:20 PM</li>
+            <li>Clean and store robots; ensure they are charging</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <h3>🍽️ Line Lead</h3>
+          <p class="role-phase">Opening</p>
+          <ul class="role-items">
+            <li>Check attendance & Dress/Grooming</li>
+            <li>Ensure all food in buffet lines is set up</li>
+            <li>Complete Jolt Checklist</li>
+          </ul>
+          <p class="role-phase">During Operations</p>
+          <ul class="role-items">
+            <li>No phones; workers in complete uniform incl. hats</li>
+            <li>Food pans refilled promptly; check warmer for extra food</li>
+            <li>Follow up to turn off warmers at 6:30 PM</li>
+            <li>Remind workers to pack Ziplock for Aloha Harvest</li>
+          </ul>
+          <p class="role-phase">Closing</p>
+          <ul class="role-items">
+            <li>Train workers needing help — don't do it yourself</li>
+            <li>Confirm Salad Bar valves are closed</li>
+            <li>No food left in warmers, back units, or hot units</li>
+          </ul>
+        </div>
+        <div class="role-card">
+          <h3>🔥 Back Lead</h3>
+          <p class="role-phase">Opening</p>
+          <ul class="role-items">
+            <li>Check runner attendance; report no-shows</li>
+            <li>Check dress/grooming of runners and scrapers</li>
+            <li>Ensure trash & food waste bins are ready</li>
+            <li>Complete Opening Jolt Checklist</li>
+          </ul>
+          <p class="role-phase">During Operations</p>
+          <ul class="role-items">
+            <li>Check food quality and accuracy on all deliveries</li>
+            <li>Ensure food is run within 3 minutes</li>
+            <li>Monitor back units; request refills as needed</li>
+            <li>Ensure robots' pathways are never blocked</li>
+          </ul>
+          <p class="role-phase">Closing</p>
+          <ul class="role-items">
+            <li>Set up make-plate table at 6:15 PM</li>
+            <li>Pack Aloha Harvest food; discard expired items</li>
+            <li>Wash & dry floors; clean back refrigerator</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── GUEST INTERACTION ── -->
+<section id="guest">
+  <div class="section">
+    <p class="section-label reveal">Guest Interaction</p>
+    <h2 class="section-title reveal">Create <em>Aloha</em><br>Moments</h2>
+    <div class="divider reveal"></div>
+
+    <div class="aloha-grid reveal">
+      <div class="aloha-card">
+        <div class="aloha-icon">😊</div>
+        <h3>Smile Always</h3>
+        <p>Smile at guests even when they are just passing by. A genuine smile is the foundation of every Aloha Moment.</p>
+      </div>
+      <div class="aloha-card">
+        <div class="aloha-icon">🤝</div>
+        <h3>Greet & Offer</h3>
+        <p>Say "Aloha" or ask "Is there anything I can help you with?" — leads set the example by interacting with guests first.</p>
+      </div>
+      <div class="aloha-card">
+        <div class="aloha-icon">🌟</div>
+        <h3>Train Your Team</h3>
+        <p>Conduct mini trainings to practice guest interaction. Acknowledge worker efforts with focused recognition cards.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 60px;" class="reveal">
+      <p class="section-label">Professional Image · Body Language</p>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:28px; color:#fff; margin-bottom: 20px;">Why body language matters</h3>
+      <p style="font-size:14px; color:rgba(255,255,255,0.6); max-width:600px; line-height:1.8; margin-bottom:28px;">Guests notice our actions, posture, and facial expressions even before we speak. Good body language creates a welcoming and professional environment.</p>
+      <div class="body-tips">
+        <span class="tip-chip">✓ Smile & Greet Warmly</span>
+        <span class="tip-chip">✓ Maintain Eye Contact</span>
+        <span class="tip-chip">✓ Stand Straight</span>
+        <span class="tip-chip">✓ Stay Approachable</span>
+        <span class="tip-chip">✗ No Crossed Arms</span>
+        <span class="tip-chip">✗ No Eye Rolling</span>
+        <span class="tip-chip">✗ No Slouching</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── QUOTE ── -->
+<div class="quote-block">
+  <p class="quote-text reveal">"People may hear your words, but they feel your attitude."</p>
+  <p class="quote-attr reveal">— John C. Maxwell</p>
+</div>
+
+<!-- ── LEADING WITH CONFIDENCE ── -->
+<section style="background: var(--cream); padding: 0;">
+  <div class="section">
+    <p class="section-label reveal">Employee Interaction</p>
+    <h2 class="section-title reveal">Leading with <em>Confidence</em></h2>
+    <div class="divider reveal"></div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;" class="reveal">
+      <div style="background:#fff; padding:28px; border-top: 3px solid var(--gold);">
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px;">Communication</p>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; margin-bottom:12px;">Assignments</h3>
+        <p style="font-size:12px; color:#555; line-height:1.7;">Communicate clearly what is expected. Send schedules on Saturday night or before the shift. Support workers who are unsure through training.</p>
+      </div>
+      <div style="background:#fff; padding:28px; border-top: 3px solid var(--green);">
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--green); margin-bottom:12px;">Kokua</p>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; margin-bottom:12px;">Quick Check-In</h3>
+        <p style="font-size:12px; color:#555; line-height:1.7;">A quick temp-check with the employee — not coaching or reprimanding. Simply asking: "How are you? How can I help you achieve your goals?"</p>
+      </div>
+      <div style="background:#fff; padding:28px; border-top: 3px solid var(--rose);">
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--rose); margin-bottom:12px;">Mālama — "To Take Care Of"</p>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:22px; margin-bottom:12px;">Team Huddle</h3>
+        <p style="font-size:12px; color:#555; line-height:1.7;">Time for workers to gather with leads, discuss performance, brainstorm improvements, and address attendance or compliance matters.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px; background:#fff; padding: 32px; border-left: 4px solid var(--gold);" class="reveal">
+      <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:12px;">Correction / Coaching · The Sandwich Method</p>
+      <div style="display:flex; gap:24px; flex-wrap:wrap;">
+        <div style="flex:1; min-width:180px; text-align:center; padding:20px; background:#f9f9f9;">
+          <p style="font-size:28px; margin-bottom:8px;">🍞</p>
+          <p style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--green); margin-bottom:6px;">Top Bun</p>
+          <p style="font-size:13px; color:#555;">Start with something positive — what they are good at</p>
+        </div>
+        <div style="flex:1; min-width:180px; text-align:center; padding:20px; background:#f9f9f9;">
+          <p style="font-size:28px; margin-bottom:8px;">🥩</p>
+          <p style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--rose); margin-bottom:6px;">The Meat</p>
+          <p style="font-size:13px; color:#555;">Inform them of areas to improve</p>
+        </div>
+        <div style="flex:1; min-width:180px; text-align:center; padding:20px; background:#f9f9f9;">
+          <p style="font-size:28px; margin-bottom:8px;">🍞</p>
+          <p style="font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--green); margin-bottom:6px;">Bottom Bun</p>
+          <p style="font-size:13px; color:#555;">End with something they are doing great</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── KITCHEN PRODUCTION ── -->
+<section id="kitchen" style="background: var(--section-bg); padding: 0;">
+  <div class="section">
+    <p class="section-label reveal">Kitchen Production</p>
+    <h2 class="section-title reveal"><em>Standard</em><br>Performance Roles</h2>
+    <div class="divider reveal"></div>
+
+    <div class="kitchen-roles reveal">
+      <div class="kitchen-card">
+        <h3>🍍 KSW Smoothie</h3>
+        <p>Oversees pineapple cutting, punching, smoothie blending, and all preparation for guest service. Ensures proper ratios and first-in-first-out rotation.</p>
+      </div>
+      <div class="kitchen-card">
+        <h3>🫧 Dishwasher</h3>
+        <p>Manages the full dishwashing flow from scraping to shelving. Assigns stations, monitors machine operation, and ensures clean dishes return quickly to service areas.</p>
+      </div>
+      <div class="kitchen-card">
+        <h3>☀️ Morning Custodian</h3>
+        <p>Supervises cleaning across Main Kitchen, Gateway, Ohana, and Aloha. Oversees restrooms, oil disposal, plate delivery coordination, and brunch setup.</p>
+      </div>
+      <div class="kitchen-card">
+        <h3>🌙 Night Custodian</h3>
+        <p>Manages evening cleaning across all four areas. Ensures proper waste handling, sanitation standards, and approves clock-out only after all tasks are verified complete.</p>
+      </div>
+      <div class="kitchen-card">
+        <h3>🚗 LS / Runner System</h3>
+        <p>Coordinates food delivery schedules for cold units, hot units, bakery, and smoothies. Monitors food counts, temperatures, and ensures all venues receive correct items on time.</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px; background:#fff; padding:28px; border:1px solid rgba(201,169,110,0.2);" class="reveal">
+      <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:16px;">Smoothie Preparation · Standard Ratios</p>
+      <div style="display:flex; gap:40px; flex-wrap:wrap;">
+        <div>
+          <p style="font-size:12px; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">Smoothie Mix</p>
+          <p style="font-size:13px; color:#555;">24 oz piña colada mix + 8 oz ice cream mix per blender jar</p>
+        </div>
+        <div>
+          <p style="font-size:12px; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">Roasted Pineapple</p>
+          <p style="font-size:13px; color:#555;">5×3 halved cores + 1 cup brown sugar + 1 tsp cinnamon per pan</p>
+        </div>
+        <div>
+          <p style="font-size:12px; font-weight:600; margin-bottom:6px; text-transform:uppercase; letter-spacing:1px;">Transfer (Aloha)</p>
+          <p style="font-size:13px; color:#555;">3 full coolers + 1 half cooler</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── JOLT CHECKLIST ── -->
+<section style="background: var(--cream); padding: 0;">
+  <div class="section">
+    <p class="section-label reveal">Digital Accountability</p>
+    <h2 class="section-title reveal">Jolt <em>Checklist</em></h2>
+    <div class="divider reveal"></div>
+    <p class="reveal" style="font-family:'Cormorant Garamond',serif; font-size:20px; color:#555; font-style:italic; max-width:600px; line-height:1.7; margin-bottom:40px;">Jolt is the tool we use to manage tasks and assignments as leaders — ensuring we are at our best when we receive guests, and to ensure food and employee safety.</p>
+
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;" class="reveal">
+      <div style="background:#fff; padding:28px; text-align:center; border:1px solid rgba(0,0,0,0.06);">
+        <p style="font-size:36px; font-family:'Cormorant Garamond',serif; font-weight:600; color:var(--green);">100%</p>
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#999; margin-top:6px;">Goal Completion Rate</p>
+      </div>
+      <div style="background:#fff; padding:28px; text-align:center; border:1px solid rgba(0,0,0,0.06);">
+        <p style="font-size:36px; font-family:'Cormorant Garamond',serif; font-weight:600; color:var(--gold);">0%</p>
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#999; margin-top:6px;">Missed Items Target</p>
+      </div>
+      <div style="background:#fff; padding:28px; text-align:center; border:1px solid rgba(0,0,0,0.06);">
+        <p style="font-size:36px; font-family:'Cormorant Garamond',serif; font-weight:600; color:var(--rose);">3×</p>
+        <p style="font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#999; margin-top:6px;">Daily Check Points</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ASSESSMENT ── -->
+<section id="assessment" style="background: var(--section-bg); padding: 0;">
+  <div class="section">
+    <p class="section-label reveal">Self-Assessment</p>
+    <h2 class="section-title reveal">Leadership <em>Questionnaire</em></h2>
+    <div class="divider reveal"></div>
+
+    <p class="assessment-intro reveal">Rate yourself on each statement using the scale below — with 5 being Almost Always True and 1 being Almost Never True.</p>
+
+    <div class="scale-legend reveal">
+      <div class="scale-item"><div class="scale-dot" style="background:#2d6a4f;">5</div><span>Almost Always True</span></div>
+      <div class="scale-item"><div class="scale-dot" style="background:#52b788;">4</div><span>Frequently True</span></div>
+      <div class="scale-item"><div class="scale-dot" style="background:#c9a96e;">3</div><span>Occasionally True</span></div>
+      <div class="scale-item"><div class="scale-dot" style="background:#e07a5f;">2</div><span>Seldom True</span></div>
+      <div class="scale-item"><div class="scale-dot" style="background:#c97b7b;">1</div><span>Almost Never True</span></div>
+    </div>
+
+    <div class="assessment-questions reveal">
+      <div class="q-item">
+        <span class="q-num">01</span>
+        <span class="q-text">I enjoy communicating with others.</span>
+        <div class="q-scale">
+          <input type="radio" name="q1" value="1" class="q-radio" id="q1-1">
+          <label for="q1-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q1" value="2" class="q-radio" id="q1-2">
+          <label for="q1-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q1" value="3" class="q-radio" id="q1-3">
+          <label for="q1-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q1" value="4" class="q-radio" id="q1-4">
+          <label for="q1-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q1" value="5" class="q-radio" id="q1-5">
+          <label for="q1-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">02</span>
+        <span class="q-text">I am honest and fair.</span>
+        <div class="q-scale">
+          <input type="radio" name="q2" value="1" class="q-radio" id="q2-1">
+          <label for="q2-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q2" value="2" class="q-radio" id="q2-2">
+          <label for="q2-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q2" value="3" class="q-radio" id="q2-3">
+          <label for="q2-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q2" value="4" class="q-radio" id="q2-4">
+          <label for="q2-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q2" value="5" class="q-radio" id="q2-5">
+          <label for="q2-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">03</span>
+        <span class="q-text">I make decisions with input from others.</span>
+        <div class="q-scale">
+          <input type="radio" name="q3" value="1" class="q-radio" id="q3-1">
+          <label for="q3-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q3" value="2" class="q-radio" id="q3-2">
+          <label for="q3-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q3" value="3" class="q-radio" id="q3-3">
+          <label for="q3-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q3" value="4" class="q-radio" id="q3-4">
+          <label for="q3-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q3" value="5" class="q-radio" id="q3-5">
+          <label for="q3-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">04</span>
+        <span class="q-text">My actions are consistent.</span>
+        <div class="q-scale">
+          <input type="radio" name="q4" value="1" class="q-radio" id="q4-1">
+          <label for="q4-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q4" value="2" class="q-radio" id="q4-2">
+          <label for="q4-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q4" value="3" class="q-radio" id="q4-3">
+          <label for="q4-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q4" value="4" class="q-radio" id="q4-4">
+          <label for="q4-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q4" value="5" class="q-radio" id="q4-5">
+          <label for="q4-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">05</span>
+        <span class="q-text">I give others the information they need to do their jobs.</span>
+        <div class="q-scale">
+          <input type="radio" name="q5" value="1" class="q-radio" id="q5-1">
+          <label for="q5-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q5" value="2" class="q-radio" id="q5-2">
+          <label for="q5-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q5" value="3" class="q-radio" id="q5-3">
+          <label for="q5-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q5" value="4" class="q-radio" id="q5-4">
+          <label for="q5-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q5" value="5" class="q-radio" id="q5-5">
+          <label for="q5-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">06</span>
+        <span class="q-text">I keep focused through follow-up.</span>
+        <div class="q-scale">
+          <input type="radio" name="q6" value="1" class="q-radio" id="q6-1">
+          <label for="q6-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q6" value="2" class="q-radio" id="q6-2">
+          <label for="q6-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q6" value="3" class="q-radio" id="q6-3">
+          <label for="q6-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q6" value="4" class="q-radio" id="q6-4">
+          <label for="q6-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q6" value="5" class="q-radio" id="q6-5">
+          <label for="q6-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">07</span>
+        <span class="q-text">I listen to feedback and ask questions.</span>
+        <div class="q-scale">
+          <input type="radio" name="q7" value="1" class="q-radio" id="q7-1">
+          <label for="q7-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q7" value="2" class="q-radio" id="q7-2">
+          <label for="q7-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q7" value="3" class="q-radio" id="q7-3">
+          <label for="q7-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q7" value="4" class="q-radio" id="q7-4">
+          <label for="q7-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q7" value="5" class="q-radio" id="q7-5">
+          <label for="q7-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">08</span>
+        <span class="q-text">I show loyalty to the company and to the team members.</span>
+        <div class="q-scale">
+          <input type="radio" name="q8" value="1" class="q-radio" id="q8-1">
+          <label for="q8-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q8" value="2" class="q-radio" id="q8-2">
+          <label for="q8-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q8" value="3" class="q-radio" id="q8-3">
+          <label for="q8-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q8" value="4" class="q-radio" id="q8-4">
+          <label for="q8-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q8" value="5" class="q-radio" id="q8-5">
+          <label for="q8-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">09</span>
+        <span class="q-text">I create an atmosphere of growth.</span>
+        <div class="q-scale">
+          <input type="radio" name="q9" value="1" class="q-radio" id="q9-1">
+          <label for="q9-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q9" value="2" class="q-radio" id="q9-2">
+          <label for="q9-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q9" value="3" class="q-radio" id="q9-3">
+          <label for="q9-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q9" value="4" class="q-radio" id="q9-4">
+          <label for="q9-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q9" value="5" class="q-radio" id="q9-5">
+          <label for="q9-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">10</span>
+        <span class="q-text">I have wide visibility.</span>
+        <div class="q-scale">
+          <input type="radio" name="q10" value="1" class="q-radio" id="q10-1">
+          <label for="q10-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q10" value="2" class="q-radio" id="q10-2">
+          <label for="q10-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q10" value="3" class="q-radio" id="q10-3">
+          <label for="q10-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q10" value="4" class="q-radio" id="q10-4">
+          <label for="q10-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q10" value="5" class="q-radio" id="q10-5">
+          <label for="q10-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">11</span>
+        <span class="q-text">I give praise and recognition.</span>
+        <div class="q-scale">
+          <input type="radio" name="q11" value="1" class="q-radio" id="q11-1">
+          <label for="q11-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q11" value="2" class="q-radio" id="q11-2">
+          <label for="q11-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q11" value="3" class="q-radio" id="q11-3">
+          <label for="q11-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q11" value="4" class="q-radio" id="q11-4">
+          <label for="q11-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q11" value="5" class="q-radio" id="q11-5">
+          <label for="q11-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">12</span>
+        <span class="q-text">I criticize constructively and address problems.</span>
+        <div class="q-scale">
+          <input type="radio" name="q12" value="1" class="q-radio" id="q12-1">
+          <label for="q12-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q12" value="2" class="q-radio" id="q12-2">
+          <label for="q12-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q12" value="3" class="q-radio" id="q12-3">
+          <label for="q12-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q12" value="4" class="q-radio" id="q12-4">
+          <label for="q12-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q12" value="5" class="q-radio" id="q12-5">
+          <label for="q12-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">13</span>
+        <span class="q-text">I develop plans.</span>
+        <div class="q-scale">
+          <input type="radio" name="q13" value="1" class="q-radio" id="q13-1">
+          <label for="q13-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q13" value="2" class="q-radio" id="q13-2">
+          <label for="q13-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q13" value="3" class="q-radio" id="q13-3">
+          <label for="q13-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q13" value="4" class="q-radio" id="q13-4">
+          <label for="q13-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q13" value="5" class="q-radio" id="q13-5">
+          <label for="q13-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+      <div class="q-item">
+        <span class="q-num">14</span>
+        <span class="q-text">I have a vision on where we are going and set long term goals.</span>
+        <div class="q-scale">
+          <input type="radio" name="q14" value="1" class="q-radio" id="q14-1">
+          <label for="q14-1" class="q-dot" title="1"></label>
+          <input type="radio" name="q14" value="2" class="q-radio" id="q14-2">
+          <label for="q14-2" class="q-dot" title="2"></label>
+          <input type="radio" name="q14" value="3" class="q-radio" id="q14-3">
+          <label for="q14-3" class="q-dot" title="3"></label>
+          <input type="radio" name="q14" value="4" class="q-radio" id="q14-4">
+          <label for="q14-4" class="q-dot" title="4"></label>
+          <input type="radio" name="q14" value="5" class="q-radio" id="q14-5">
+          <label for="q14-5" class="q-dot" title="5"></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="assessment-actions reveal">
+      <button type="button" id="submit-assessment" class="submit-btn">Submit Assessment</button>
+      <button type="button" id="reset-assessment" class="reset-btn">Reset Assessment</button>
+    </div>
+
+    <div id="assessment-result" class="result-box" style="display: none;">
+      <h3>Your Leadership Score</h3>
+      <div class="score-display">
+        <span class="score-number" id="total-score">0</span>
+        <span class="score-max">/ 70</span>
+      </div>
+      <p class="score-interpretation" id="score-text">Complete the assessment to see your results.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <span class="lei">🌺</span>
+  <span class="brand">Me'a Ho'okipa</span>
+  <span class="tagline">Hospitality from the Heart</span>
+  <p style="font-family:'Cormorant Garamond',serif; font-size:18px; font-style:italic; color:rgba(255,255,255,0.4); max-width:500px; margin: 0 auto 30px; line-height:1.6;">"A leader is one who knows the way, goes the way, and shows the way."</p>
+  <span class="year">Dining Services & Kitchen Production · Leadership Handbook 2026</span>
+</footer>
+
+<script>
+  // Tab switching
+  function switchTab(venue) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + venue).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Assessment submission
+  document.getElementById('submit-assessment').addEventListener('click', () => {
+    let totalScore = 0;
+    let answered = 0;
+    const totalQuestions = 14;
+
+    for (let i = 1; i <= totalQuestions; i++) {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (selected) {
+        totalScore += parseInt(selected.value);
+        answered++;
+      }
+    }
+
+    if (answered < totalQuestions) {
+      alert(`Please answer all ${totalQuestions} questions before submitting. You've answered ${answered} so far.`);
+      return;
+    }
+
+    // Calculate average score
+    const averageScore = totalScore / totalQuestions;
+
+    // Determine interpretation
+    let interpretation = '';
+    if (averageScore >= 4.5) {
+      interpretation = 'Outstanding! You demonstrate exceptional leadership qualities. Continue to lead by example and mentor others.';
+    } else if (averageScore >= 4.0) {
+      interpretation = 'Excellent! You show strong leadership skills. Focus on areas where you can further develop your influence.';
+    } else if (averageScore >= 3.5) {
+      interpretation = 'Good! You have solid leadership foundations. Work on consistency and building stronger relationships with your team.';
+    } else if (averageScore >= 3.0) {
+      interpretation = 'Fair! You have potential as a leader. Focus on communication, planning, and team development to improve.';
+    } else {
+      interpretation = 'Needs improvement. Leadership is a journey. Start by building self-awareness and learning from experienced leaders around you.';
+    }
+
+    // Display results
+    document.getElementById('total-score').textContent = totalScore;
+    document.getElementById('score-text').textContent = interpretation;
+    document.getElementById('assessment-result').style.display = 'block';
+
+    // Scroll to results
+    document.getElementById('assessment-result').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+
+  // Assessment reset
+  document.getElementById('reset-assessment').addEventListener('click', () => {
+    // Clear all radio button selections
+    const radioButtons = document.querySelectorAll('input[type="radio"][name^="q"]');
+    radioButtons.forEach(radio => {
+      radio.checked = false;
+    });
+
+    // Hide results
+    document.getElementById('assessment-result').style.display = 'none';
+
+    // Reset score display
+    document.getElementById('total-score').textContent = '0';
+    document.getElementById('score-text').textContent = 'Complete the assessment to see your results.';
+
+    // Scroll back to assessment
+    document.querySelector('.assessment-questions').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+</script>
+
+</body>
+</html>
