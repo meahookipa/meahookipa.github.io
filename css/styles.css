@@ -1,6 +1,4 @@
-<style>
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 
   :root {
@@ -615,6 +613,7 @@
   #venues .section-title { color: #FDF8EF; }
   #venues .section-body { color: rgba(253,248,239,0.6); }
   #venues .section-eyebrow { color: var(--gold-light); }
+  #venues .section { background: transparent; }
 
 
   .venues-grid {
@@ -632,11 +631,36 @@
     border: 1px solid rgba(184,145,42,0.2);
     border-radius: 20px;
     overflow: hidden;
-    transition: border-color 0.25s;
+    transition: border-color 0.25s, background 0.25s;
+    background-color: #1A1208;
+    background: linear-gradient(180deg, rgba(26,18,8,0.98) 0%, rgba(35,22,14,0.98) 100%);
+    color: #FDF8EF;
   }
 
 
-  .venue-card:hover { border-color: rgba(184,145,42,0.5); }
+  .venue-card:hover {
+    border-color: rgba(184,145,42,0.5);
+    background: linear-gradient(180deg, rgba(35,24,15,1) 0%, rgba(45,30,20,1) 100%);
+  }
+
+
+  .venue-link {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+
+
+  .gateway-card {
+    background: linear-gradient(180deg, rgba(31,57,35,0.95) 0%, rgba(35,67,44,0.95) 100%);
+    border-color: rgba(61,118,75,0.25);
+  }
+
+
+  .gateway-card:hover {
+    background: linear-gradient(180deg, rgba(29,63,40,1) 0%, rgba(35,75,49,1) 100%);
+    border-color: rgba(61,118,75,0.6);
+  }
 
 
   .venue-header {
@@ -870,6 +894,3 @@
       transform: translateX(8px);
     }
   }
-
-
-</style>
