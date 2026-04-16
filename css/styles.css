@@ -19,7 +19,11 @@
   }
 
 
-  html { scroll-behavior: smooth; }
+  html { 
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+  }
 
 
   body {
@@ -27,6 +31,9 @@
     background: var(--cream);
     color: var(--text);
     overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
   }
 
  a {
@@ -271,11 +278,46 @@
   .nav-links a:hover { color: var(--gold-light); }
 
 
+  /* Hamburger Menu */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 2px;
+    background: var(--gold-light);
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .hamburger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+
   /* ── SECTION WRAPPER ── */
   .section {
     max-width: 1100px;
     margin: 0 auto;
     padding: clamp(48px, 8vw, 96px) clamp(20px, 5vw, 60px);
+    background: #fff;
   }
 
 
@@ -773,6 +815,61 @@
   }
   
   
+
+
+  /* ── MOBILE NAV ── */
+  @media (max-width: 768px) {
+    .hamburger {
+      display: flex;
+    }
+
+    .nav-links {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 280px;
+      height: 100vh;
+      background: var(--dark);
+      border-left: 1px solid rgba(184,145,42,0.25);
+      flex-direction: column;
+      gap: 0;
+      padding: 80px 0 40px;
+      transform: translateX(100%);
+      opacity: 1;
+      visibility: hidden;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 99;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+    }
+
+    .nav-links.active {
+      transform: translateX(0);
+      visibility: visible;
+    }
+
+    .nav-links li {
+      text-align: center;
+      border-bottom: 1px solid rgba(184,145,42,0.1);
+    }
+
+    .nav-links li:last-child {
+      border-bottom: none;
+    }
+
+    .nav-links a {
+      display: block;
+      padding: 20px 24px;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      background: rgba(184,145,42,0.1);
+      color: var(--gold-light);
+      transform: translateX(8px);
+    }
+  }
 
 
 </style>

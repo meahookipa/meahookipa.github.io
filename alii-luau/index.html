@@ -24,7 +24,83 @@
   .nav-links { display: flex; gap: clamp(12px,2.5vw,28px); list-style: none; }
   .nav-links a { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(253,248,239,0.6); text-decoration: none; transition: color 0.2s; }
   .nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
-  @media(max-width:600px){ .nav-links { display: none; } }
+
+  /* Hamburger Menu */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .hamburger-line {
+    width: 100%;
+    height: 2px;
+    background: var(--gold-light);
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+
+  .hamburger.active .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+  /* Mobile Nav */
+  @media(max-width:768px){
+    .hamburger { display: flex; }
+    .nav-links {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 280px;
+      height: 100vh;
+      background: var(--dark);
+      border-left: 1px solid rgba(184,145,42,0.25);
+      flex-direction: column;
+      gap: 0;
+      padding: 80px 0 40px;
+      transform: translateX(100%);
+      opacity: 1;
+      visibility: hidden;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 99;
+      box-shadow: -4px 0 20px rgba(0,0,0,0.3);
+    }
+    .nav-links.active {
+      transform: translateX(0);
+      visibility: visible;
+    }
+    .nav-links li {
+      text-align: center;
+      border-bottom: 1px solid rgba(184,145,42,0.1);
+    }
+    .nav-links li:last-child { border-bottom: none; }
+    .nav-links a {
+      display: block;
+      padding: 20px 24px;
+      font-size: 16px;
+      letter-spacing: 0.1em;
+      transition: all 0.2s ease;
+    }
+    .nav-links a:hover {
+      background: rgba(184,145,42,0.1);
+      color: var(--gold-light);
+      transform: translateX(8px);
+    }
+  }
 
   /* HERO */
   .hero { position: relative; min-height: 60vh; background: linear-gradient(160deg, #1A0E06 0%, #2D1A08 50%, #3D2510 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 80px 24px 60px; overflow: hidden; }
@@ -138,6 +214,11 @@
       <li><a href="../policies/index.html">Policies</a></li>
       <li><a href="../leads-training/index.html">Leads Training</a></li>
     </ul>
+    <button class="hamburger" aria-label="Toggle navigation menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
   </div>
 </nav>
 
@@ -580,6 +661,31 @@
     });
   }, { threshold: 0.08 });
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Hamburger menu toggle
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('active');
+    navLinks.classList.toggle('active');
+  });
+
+  // Close mobile menu when clicking a link
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('active');
+    });
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!hamburger.contains(e.target) && !navLinks.contains(e.target)) {
+      hamburger.classList.remove('active');
+      navLinks.classList.remove('active');
+    }
+  });
 </script>
 </body>
 </html>

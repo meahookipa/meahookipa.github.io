@@ -745,9 +745,128 @@
       .aloha-grid { grid-template-columns: 1fr; }
       .assessment-questions { grid-template-columns: 1fr; }
       .main-nav, .secondary-nav { padding: 0 20px; }
-      .nav-links { display: none; }
+      .main-nav .nav-links { display: none; }
+      .secondary-nav .nav-links { display: block; }
       .section { padding: 60px 24px; }
     }
+
+    .secondary-nav-toggle {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: 1px solid rgba(201,169,110,0.3);
+      color: var(--dark);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .secondary-nav-toggle .toggle-icon {
+      transition: transform 0.2s ease;
+    }
+
+    .secondary-nav-toggle.active .toggle-icon {
+      transform: rotate(180deg);
+    }
+
+    .secondary-nav .nav-inner {
+      position: relative;
+    }
+
+    .secondary-nav .nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: block;
+      max-height: 0;
+      overflow: hidden;
+      background: var(--section-bg);
+      border: 1px solid rgba(201,169,110,0.2);
+      border-top: none;
+      transition: max-height 0.3s ease;
+      z-index: 98;
+    }
+
+    .secondary-nav .nav-links.active {
+      max-height: 360px;
+    }
+
+    .secondary-nav .nav-links li {
+      margin: 0;
+    }
+
+    .secondary-nav .nav-links a {
+      display: block;
+      padding: 12px 18px;
+      color: var(--dark);
+      font-size: 12px;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(201,169,110,0.1);
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .secondary-nav .nav-links a:hover {
+      background: rgba(201,169,110,0.08);
+      color: var(--gold);
+    }
+
+    .secondary-nav .nav-links a:last-child {
+      border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+      .secondary-nav-toggle { display: flex; }
+    }
+
+    /* HAMBURGER MENU */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-around;
+      width: 24px;
+      height: 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .hamburger-line {
+      width: 100%;
+      height: 2px;
+      background: var(--gold);
+      transition: all 0.3s ease;
+      transform-origin: center;
+    }
+
+    .hamburger.active .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .hamburger.active .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+    .nav-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(26, 18, 8, 0.8); opacity: 0; visibility: hidden; transition: all 0.3s ease; z-index: 999; }
+    .nav-overlay.active { opacity: 1; visibility: visible; }
+    .mobile-nav { position: fixed; top: 0; right: -280px; width: 280px; height: 100vh; background: var(--dark); transition: right 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1000; display: flex; flex-direction: column; }
+    .mobile-nav.active { right: 0; }
+    .mobile-nav-header { display: flex; justify-content: flex-end; padding: 20px; border-bottom: 1px solid rgba(201,169,110,0.2); }
+    .close-btn { background: none; border: none; color: var(--gold); font-size: 28px; cursor: pointer; padding: 0; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+    .mobile-nav-links { flex: 1; display: flex; flex-direction: column; padding: 40px 0; }
+    .mobile-nav-links a { color: rgba(253,248,242,0.8); text-decoration: none; font-size: 16px; font-weight: 400; padding: 16px 30px; transition: all 0.2s ease; border-bottom: 1px solid rgba(201,169,110,0.1); }
+    .mobile-nav-links a:hover, .mobile-nav-links a.active { color: var(--gold-light); background: rgba(201,169,110,0.1); }
+    .menu-open { overflow: hidden; }
+    @media(max-width:600px){ .hamburger { display: flex; } }
   </style>
 </head>
 <body>
@@ -781,6 +900,11 @@
       <img src="/assets/LOGO.svg" alt="PCC Dining Services">
       <span>Leadership Handbook</span>
     </a>
+    <button class="hamburger" aria-label="Toggle navigation menu">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
     <ul class="nav-links">
       <li><a href="../index.html">Home</a></li>
       <li><a href="../alii-luau/index.html" class="active">Ali'i Luau</a></li>
@@ -796,7 +920,11 @@
 <nav class="secondary-nav">
   <div class="nav-inner">
     <span class="nav-logo">Leadership Handbook</span>
-    <ul class="nav-links">
+    <button class="secondary-nav-toggle" aria-expanded="false" aria-controls="secondary-section-links">
+      <span class="toggle-icon">▼</span>
+      <span class="toggle-label">Sections</span>
+    </button>
+    <ul class="nav-links" id="secondary-section-links">
       <li><a href="#leadership">Leadership</a></li>
       <li><a href="#accountability">Accountability</a></li>
       <li><a href="#venues">Venues</a></li>
@@ -806,6 +934,22 @@
     </ul>
   </div>
 </nav>
+
+<!-- MOBILE NAVIGATION -->
+<div class="nav-overlay"></div>
+<div class="mobile-nav">
+  <div class="mobile-nav-header">
+    <button class="close-btn" aria-label="Close navigation menu">×</button>
+  </div>
+  <nav class="mobile-nav-links">
+    <a href="../index.html">Home</a>
+    <a href="../alii-luau/index.html">Ali'i Luau</a>
+    <a href="../gateway-buffet/index.html">Gateway Buffet</a>
+    <a href="../team/index.html">Team</a>
+    <a href="../policies/index.html">Policies</a>
+    <a href="../leads-training/index.html" class="active">Leads Training</a>
+  </nav>
+</div>
 
 <!-- ── LEADERSHIP INTRO ── -->
 <section id="leadership">
@@ -1501,6 +1645,86 @@
 </footer>
 
 <script>
+  // Hamburger menu functionality
+  const hamburgerBtn = document.querySelector('.hamburger');
+  const mobileNav = document.querySelector('.mobile-nav');
+  const navOverlay = document.querySelector('.nav-overlay');
+  const closeBtn = document.querySelector('.close-btn');
+
+  function toggleMenu() {
+    hamburgerBtn.classList.toggle('active');
+    mobileNav.classList.toggle('active');
+    navOverlay.classList.toggle('active');
+    document.body.classList.toggle('menu-open');
+  }
+
+  function closeMenu() {
+    hamburgerBtn.classList.remove('active');
+    mobileNav.classList.remove('active');
+    navOverlay.classList.remove('active');
+    document.body.classList.remove('menu-open');
+  }
+
+  hamburgerBtn.addEventListener('click', toggleMenu);
+  closeBtn.addEventListener('click', closeMenu);
+  navOverlay.addEventListener('click', closeMenu);
+
+  // Close menu when clicking nav links
+  document.querySelectorAll('.mobile-nav a').forEach(link => {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // Secondary nav dropdown toggle
+  const secondaryNavToggle = document.querySelector('.secondary-nav-toggle');
+  const secondaryNavLinks = document.querySelector('.secondary-nav .nav-links');
+
+  if (secondaryNavToggle && secondaryNavLinks) {
+    const secondaryNavToggleLabel = document.querySelector('.secondary-nav-toggle .toggle-label');
+    const sectionLinks = Array.from(document.querySelectorAll('.secondary-nav .nav-links a'));
+    const sections = sectionLinks.map(link => ({
+      id: link.getAttribute('href').slice(1),
+      title: link.textContent.trim()
+    }));
+
+    function setSecondaryNavLabel(title) {
+      secondaryNavToggleLabel.textContent = title || 'Sections';
+    }
+
+    function updateSectionLabel() {
+      const threshold = window.innerHeight * 0.35;
+      let currentSection = sections[0];
+
+      sections.forEach(section => {
+        const element = document.getElementById(section.id);
+        if (!element) return;
+        const rect = element.getBoundingClientRect();
+        if (rect.top <= threshold) {
+          currentSection = section;
+        }
+      });
+
+      setSecondaryNavLabel(currentSection.title);
+    }
+
+    secondaryNavToggle.addEventListener('click', () => {
+      const isOpen = secondaryNavLinks.classList.toggle('active');
+      secondaryNavToggle.classList.toggle('active', isOpen);
+      secondaryNavToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+
+    secondaryNavLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        secondaryNavLinks.classList.remove('active');
+        secondaryNavToggle.classList.remove('active');
+        secondaryNavToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    window.addEventListener('scroll', updateSectionLabel, { passive: true });
+    window.addEventListener('resize', updateSectionLabel);
+    updateSectionLabel();
+  }
+
   // Tab switching
   function switchTab(venue) {
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
