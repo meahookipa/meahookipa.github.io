@@ -192,8 +192,10 @@
   .hero-scroll {
     position: absolute;
     bottom: 36px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    width: fit-content;
+    margin: 0 auto;
     z-index: 1;
     display: flex;
     flex-direction: column;
@@ -205,8 +207,8 @@
 
 
   @keyframes bob {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
   }
 
 
@@ -652,14 +654,14 @@
 
 
   .gateway-card {
-    background: linear-gradient(180deg, rgba(31,57,35,0.95) 0%, rgba(35,67,44,0.95) 100%);
-    border-color: rgba(61,118,75,0.25);
+    background: linear-gradient(180deg, rgba(32,58,53,0.92) 0%, rgba(40,68,61,0.92) 100%);
+    border-color: rgba(88,110,103,0.22);
   }
 
 
   .gateway-card:hover {
-    background: linear-gradient(180deg, rgba(29,63,40,1) 0%, rgba(35,75,49,1) 100%);
-    border-color: rgba(61,118,75,0.6);
+    background: linear-gradient(180deg, rgba(34,60,55,1) 0%, rgba(42,72,65,1) 100%);
+    border-color: rgba(88,110,103,0.45);
   }
 
 
@@ -683,7 +685,7 @@
 
 
   .venue-tag.alii { background: rgba(184,145,42,0.15); color: var(--gold-light); }
-  .venue-tag.gateway { background: rgba(45,90,61,0.3); color: #7DBF95; }
+  .venue-tag.gateway { background: rgba(95,128,111,0.24); color: #A0B8A6; }
 
 
   .venue-name {
