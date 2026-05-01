@@ -414,7 +414,7 @@ var curPage='menu',curStage=0;
 var timerInt=null,timeLeft=0,timerElId=null,retryCb=null;
 
 /* ===== NAV ===== */
-function showPage(p){document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});document.getElementById(p+'-page').classList.add('active');curPage=p;}
+function showPage(p){document.querySelectorAll('.page').forEach(function(el){el.classList.remove('active');});document.getElementById(p+'-page').classList.add('active');curPage=p;if(p!=='menu'){window.scrollTo({top:document.body.scrollHeight,left:0,behavior:'smooth'});}} 
 function goMenu(){stopTimer();closeWin();closeTimeout();closeUnlock();showPage('menu');renderMenu();}
 function restartCurrentGame(){stopTimer();closeWin();closeTimeout();launchStage(curStage);}
 
